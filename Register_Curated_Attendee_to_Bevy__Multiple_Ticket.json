@@ -1,0 +1,2612 @@
+{
+  "name": "Register Curated Attendee to Bevy (Multiple Ticket)",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g",
+          "mode": "list",
+          "cachedResultName": "I/O Extended Jakarta 2025 - Interest Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1673386161,
+          "mode": "list",
+          "cachedResultName": "Curation Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit#gid=1673386161"
+        },
+        "event": "rowUpdate",
+        "options": {
+          "dataLocationOnSheet": {
+            "values": {
+              "rangeDefinition": "specifyRangeA1",
+              "range": "A1:Z999999"
+            }
+          }
+        }
+      },
+      "id": "d1aa3112-1a5a-4ec9-b035-b2ae47c59b29",
+      "name": "Attendee Status Triggered",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        320,
+        480
+      ],
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "n59zLQzKnunYPchk",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Automation triggered on rowUpdated to ACCEPTED from Google Sheets",
+        "height": 80,
+        "width": 218.6088707718815,
+        "color": 3
+      },
+      "id": "81fb08d8-1f17-4044-9888-08e499f26e2b",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -40
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g",
+          "mode": "list",
+          "cachedResultName": "I/O Extended Jakarta 2025 - Interest Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1673386161,
+          "mode": "list",
+          "cachedResultName": "Curation Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit#gid=1673386161"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Attendee Status Triggered').item.json['Email Address'] }}",
+            "Commitment Fee Deadline": "={{ DateTime.now().plus({ days: 4 }).toFormat(\"LLLL d, yyyy\") }}"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Attendee Status",
+              "displayName": "Attendee Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Session",
+              "displayName": "Session",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Commitment Fee Deadline",
+              "displayName": "Commitment Fee Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Institution/Company",
+              "displayName": "Institution/Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "YoE",
+              "displayName": "YoE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LinkedIn",
+              "displayName": "LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fa343917-9e38-493f-9d0b-1272b31f92dd",
+      "name": "Update Commitment Fee Deadline",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1420,
+        -20
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "79f1b1ca-581f-469a-9099-f8591b68e7b3",
+              "leftValue": "={{ $json['Commitment Fee Deadline'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "4d503389-c2a3-4a54-a344-0c36c111ec8b",
+      "name": "Check if commitment fee deadline is not empty",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1660,
+        -20
+      ],
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['Email Address'] }}",
+        "subject": "You're Accepted! – Build with AI Jakarta 2025",
+        "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>You're Accepted! – Build with AI Jakarta 2025</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap\" rel=\"stylesheet\" />\n    <style>\n      body {\n        margin: 0;\n        padding: 0;\n        font-family: 'Poppins', sans-serif;\n        background-color: #f1f3f4;\n      }\n\n      .container {\n        max-width: 510px;\n        margin: 0 auto;\n        background-color: #fff;\n        padding: 30px;\n      }\n\n      .header-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .center {\n        text-align: center;\n      }\n\n      .start {\n        text-align: start;\n      }\n\n      .btn {\n        display: block;\n        background-color: #4285f4;\n        color: #fff !important;\n        text-align: center;\n        border-radius: 50px;\n        padding: 10px 20px;\n        text-decoration: none;\n        width: 60%;\n        margin: 20px auto;\n      }\n\n      .btn:hover {\n        background-color: #3367d6;\n      }\n\n      .footer-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .footer {\n        margin-top: 24pt;\n        padding: 18pt;\n        background-color: #f0f0f0;\n      }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <div class=\"center\">\n        <img src=\"https://i.imgur.com/VJguxLD.png\" alt=\"Header\" class=\"header-img\" />\n      </div>\n      <div class=\"start\">\n        <h2>Hi {{ $('Check if attendee status is ACCEPTED').item.json['Full Name'] }},</h2>\n      </div>\n      <div class=\"start\">\n        <p>Congratulations! You’ve been <strong>officially selected</strong> as a participant for <strong>Build with AI Jakarta 2025</strong> 🎉 </p>\n        <p>We're excited to have you join our curated community of professional developers and innovators at this in-person event!</p>\n        <p>To confirm your spot, please submit a <strong>refundable commitment fee</strong>. This fee is fully reimbursed on the day of the event if you attend, but will be forfeited if you don’t show up. </p>\n        <p>\n          <strong>Commitment Fee:</strong> Rp50.000 <br />\n          <strong>Deadline:</strong> {{ $('Update Commitment Fee Deadline').item.json['Commitment Fee Deadline'] }}\n        </p>\n        <a href=\"https://gdgjakarta.com/bwai-25-payment\" class=\"btn\">Submit Commitment Fee</a>\n        <p>Once we receive your fee, you will get your official event ticket and further details including agenda, speakers, and location info.</p>\n        <p>If you have any questions, feel free to reach out to us at <a href=\"mailto:info@gdgjakarta.org\">info@gdgjakarta.org</a>. </p>\n        <p>We can’t wait to welcome you at <strong>Build with AI Jakarta 2025</strong> 🚀 </p>\n      </div>\n      <div class=\"center\">\n        <div class=\"footer\">\n          <img alt=\"footer\" src=\"https://i.imgur.com/9Bwmfvj.png\" style=\"width: 113px; height: 61.13px;\" />\n        </div>\n      </div>\n    </div>\n  </body>\n</html>",
+        "options": {
+          "appendAttribution": true
+        }
+      },
+      "id": "3e49ad9d-d3dd-4874-8299-8aaf0f1795c0",
+      "name": "Send accepted email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1900,
+        0
+      ],
+      "webhookId": "d76d00f8-6da8-45ca-9fd0-0adf5fb2afc9",
+      "retryOnFail": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ItMwLZ1IpafPGMLH",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['Email Address'] }}",
+        "subject": "Update on Your Registration – I/O Extended Jakarta 2025",
+        "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Update on Your Registration – I/O Extended Jakarta 2025</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap\" rel=\"stylesheet\" />\n    <style>\n      body {\n        margin: 0;\n        padding: 0;\n        font-family: 'Poppins', sans-serif;\n        background-color: #f1f3f4;\n      }\n\n      .container {\n        max-width: 510px;\n        margin: 0 auto;\n        background-color: #fff;\n        padding: 30px;\n      }\n\n      .header-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .center {\n        text-align: center;\n      }\n\n      .start {\n        text-align: start;\n      }\n\n      .btn {\n        display: block;\n        background-color: #4285f4;\n        color: #fff !important;\n        text-align: center;\n        border-radius: 50px;\n        padding: 10px 20px;\n        text-decoration: none;\n        width: 60%;\n        margin: 20px auto;\n      }\n\n      .btn:hover {\n        background-color: #3367d6;\n      }\n\n      .footer-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .footer {\n        margin-top: 24pt;\n        padding: 18pt;\n        background-color: #f0f0f0;\n      }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <div class=\"center\">\n        <img src=\"https://i.imgur.com/ygRKd0K.png\" alt=\"Header\" class=\"header-img\" />\n      </div>\n      <div class=\"start\">\n        <h2>Hi {{ $json['Full Name'] }},</h2>\n      </div>\n      <div class=\"start\">\n        <p>Thank you for registering your interest in <strong>I/O Extended AI Jakarta 2025</strong>.</p>\n\n        <p>We’ve received an overwhelming number of amazing submissions, and due to venue capacity limitations, we regret to inform you that we’re unable to offer you an in-person spot this time.</p>\n\n        <p><strong>Please note:</strong> As your registration was not selected for in-person attendance, we kindly ask that you do not come to the venue. Unfortunately, we will not be able to accommodate you on-site, and we will not be responsible for any inconvenience caused by arriving in person. No seating or access will be available without prior confirmation.</p>\n\n        <p><strong>Please also be advised</strong> that any attempt to re-register using a false identity or duplicate/fake email addresses will be considered a serious breach of our registration policy and may be handled accordingly by the organizing team.</p>\n\n        <p><strong>However, we’d still love for you to be a part of the experience!</strong> You’re invited to join us <b>virtually</b> and follow all the event highlights, keynotes, and sessions online.</p>\n\n        <p>No commitment fee is needed for virtual participation, and we’ll be sharing the livestream and session access details with you closer to the event date.</p>\n\n        <a href=\"https://gdgjakarta.com/iox-25\" class=\"btn\">Event Website</a>\n\n        <p>If you have any questions, feel free to reach out to us at <a href=\"mailto:info@gdgjakarta.org\">info@gdgjakarta.org</a>.</p>\n\n        <p>We truly appreciate your enthusiasm and hope to connect with you during <strong>I/O Extended Jakarta 2025</strong> – online!</p>\n      </div>\n      <div class=\"center\">\n        <div class=\"footer\">\n          <img alt=\"footer\" src=\"https://i.imgur.com/9Bwmfvj.png\" style=\"width: 113px; height: 61.13px;\" />\n        </div>\n      </div>\n    </div>\n  </body>\n</html>",
+        "options": {
+          "appendAttribution": true
+        }
+      },
+      "id": "d676d1be-d392-43db-9091-45eaa28810d1",
+      "name": "Send rejected email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1180,
+        380
+      ],
+      "webhookId": "d76d00f8-6da8-45ca-9fd0-0adf5fb2afc9",
+      "retryOnFail": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ItMwLZ1IpafPGMLH",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['Email Address'] }}",
+        "subject": "Commitment Fee Deadline Missed – I/O Exteded Jakarta 2025",
+        "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Commitment Fee Deadline Missed – I/O Extended Jakarta 2025</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap\" rel=\"stylesheet\" />\n    <style>\n      body {\n        margin: 0;\n        padding: 0;\n        font-family: 'Poppins', sans-serif;\n        background-color: #f1f3f4;\n      }\n\n      .container {\n        max-width: 510px;\n        margin: 0 auto;\n        background-color: #fff;\n        padding: 30px;\n      }\n\n      .header-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .center {\n        text-align: center;\n      }\n\n      .start {\n        text-align: start;\n      }\n\n      .btn {\n        display: block;\n        background-color: #4285f4;\n        color: #fff !important;\n        text-align: center;\n        border-radius: 50px;\n        padding: 10px 20px;\n        text-decoration: none;\n        width: 60%;\n        margin: 20px auto;\n      }\n\n      .btn:hover {\n        background-color: #3367d6;\n      }\n\n      .footer-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .footer {\n        margin-top: 24pt;\n        padding: 18pt;\n        background-color: #f0f0f0;\n      }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <div class=\"center\">\n        <img src=\"https://i.imgur.com/ygRKd0K.png\" alt=\"Header\" class=\"header-img\" />\n      </div>\n      <div class=\"start\">\n        <h2>Hi {{ $('Check if attendee status is OVERDUE').item.json['Full Name'] }},</h2>\n      </div>\n      <div class=\"start\">\n        <p>We appreciate your interest and enthusiasm in joining <strong>I/O Extended Jakarta 2025</strong>, and we were glad to inform you of your selection earlier.</p>\n\n        <p>However, we noticed that the <strong>commitment fee</strong> required to confirm your in-person participation was not received within the payment window provided.</p>\n\n        <p>As this fee is part of our confirmation process and necessary to secure your seat, we must now proceed to offer your spot to another participant on the waiting list who is eager to join the event.</p>\n\n        <p>We understand that circumstances can change, and we truly appreciate the time and effort you’ve taken to apply. While we won’t be able to accommodate you in person this time, we’d still love for you to be part of the experience virtually!</p>\n\n        <p><strong>All sessions, keynotes, and updates will be accessible online</strong>, and we will share further details on how you can join remotely as the event date approaches.</p>\n\n        <a href=\"https://gdgjakarta.com/iox-25\" class=\"btn\">Visit Event Website</a>\n\n        <p>If you have any questions or need assistance, feel free to reach out to us at <a href=\"mailto:info@gdgjakarta.org\">info@gdgjakarta.org</a>.</p>\n\n        <p>Thank you again for your interest, and we hope to connect with you virtually at <strong>I/O Extended Jakarta 2025</strong> 🚀</p>\n      </div>\n      <div class=\"center\">\n        <div class=\"footer\">\n          <img alt=\"footer\" src=\"https://i.imgur.com/9Bwmfvj.png\" style=\"width: 113px; height: 61.13px;\" />\n        </div>\n      </div>\n    </div>\n  </body>\n</html>",
+        "options": {
+          "appendAttribution": true
+        }
+      },
+      "id": "660da75b-60ec-496e-918e-51e6e7c0e656",
+      "name": "Send overdue email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1180,
+        600
+      ],
+      "webhookId": "d76d00f8-6da8-45ca-9fd0-0adf5fb2afc9",
+      "retryOnFail": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ItMwLZ1IpafPGMLH",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g",
+          "mode": "list",
+          "cachedResultName": "I/O Extended Jakarta 2025 - Interest Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Curation Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E0kneIai2C_E0krch9dXdizkJ55qITboxQ-fz9p-iEM/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Check if attendee status is OVERDUE').item.json['Email Address'] }}",
+            "Automation Status": "OVERDUE EMAIL SENT"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Attendee Status",
+              "displayName": "Attendee Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Session",
+              "displayName": "Session",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Commitment Fee Deadline",
+              "displayName": "Commitment Fee Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Institution/Company",
+              "displayName": "Institution/Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "YoE",
+              "displayName": "YoE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LinkedIn",
+              "displayName": "LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7f129865-f2eb-4ef5-a33b-9cbc9a10df74",
+      "name": "Update automation status to OVERDUE EMAIL SENT",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1420,
+        600
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g",
+          "mode": "list",
+          "cachedResultName": "I/O Extended Jakarta 2025 - Interest Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1673386161,
+          "mode": "list",
+          "cachedResultName": "Curation Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit#gid=1673386161"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Check if attendee status is REJECTED').item.json['Email Address'] }}",
+            "Automation Status": "REJECTED EMAIL SENT"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Attendee Status",
+              "displayName": "Attendee Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Session",
+              "displayName": "Session",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Commitment Fee Deadline",
+              "displayName": "Commitment Fee Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Institution/Company",
+              "displayName": "Institution/Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "YoE",
+              "displayName": "YoE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LinkedIn",
+              "displayName": "LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7e1f1131-4b42-463d-80d1-de5e050dca28",
+      "name": "Update automation status to REJECTED EMAIL SENT",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1420,
+        380
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g",
+          "mode": "list",
+          "cachedResultName": "I/O Extended Jakarta 2025 - Interest Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1673386161,
+          "mode": "list",
+          "cachedResultName": "Curation Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit#gid=1673386161"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('If commitment fee deadline is empty').item.json['Email Address'] }}",
+            "Automation Status": "ACCEPTANCE EMAIL SENT"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Attendee Status",
+              "displayName": "Attendee Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Session",
+              "displayName": "Session",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Commitment Fee Deadline",
+              "displayName": "Commitment Fee Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Institution/Company",
+              "displayName": "Institution/Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "YoE",
+              "displayName": "YoE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LinkedIn",
+              "displayName": "LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5af5f909-4983-4d39-bf2a-4d2c69a0d6a2",
+      "name": "Update automation status to ACCEPTANCE EMAIL SENT",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2080,
+        160
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.uuidgenerator.net/api/version4",
+        "options": {}
+      },
+      "id": "6a81fbe7-f1f3-4cf9-accf-7dfd90968402",
+      "name": "Generate UUID",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1680,
+        1060
+      ],
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gdg.community.dev/api/system/email/manually_added_attendee_notification/resend",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "csrftoken=YVxnSgex7DNpJ1TcqAtTLZq0RggUGELB29wjCvsrEzWAedxoLuOjGSAMsxJ0SnbE; sessionid=e8v67n7yfjdals3vz5v9yhksr26a3mnq; "
+            },
+            {
+              "name": "Referer",
+              "value": "https://gdg.community.dev/accounts/dashboard/"
+            },
+            {
+              "name": "X-Csrftoken",
+              "value": "kvMkSiMZK1byJ2HVzZsbbXi8rjz974HVoJLgCx0ThXkJeel7UTNB6QsU2A2fjN7Y"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"object_uuid\": \"{{ $('If attendee has not been added').item.json.body.results[0].attendee_uuid }}\",\n  \"resend_id\": \"{{ $json.data }}\"\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "3e292c58-dd45-4ca9-8ef5-ae9c7e6da754",
+      "name": "Resend Event Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1960,
+        1080
+      ],
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "811adf73-39f8-496c-a226-cac860b18f6b",
+              "leftValue": "={{ $json.body.results }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "2797c03f-771f-459a-ac51-0d316014476e",
+      "name": "If attendee has not been added",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1420,
+        860
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g",
+          "mode": "list",
+          "cachedResultName": "I/O Extended Jakarta 2025 - Interest Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1673386161,
+          "mode": "list",
+          "cachedResultName": "Curation Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit#gid=1673386161"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Attendee Status Triggered').item.json['Email Address'] }}",
+            "Attendee Status": "ERROR ON CURATED"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Attendee Status",
+              "displayName": "Attendee Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Session",
+              "displayName": "Session",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Commitment Fee Deadline",
+              "displayName": "Commitment Fee Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Institution/Company",
+              "displayName": "Institution/Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "YoE",
+              "displayName": "YoE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LinkedIn",
+              "displayName": "LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "23de3671-7877-43a8-a39e-ccfc38609908",
+      "name": "Update attendee status to ERROR ON CURATED",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        3140,
+        280
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://gdg.community.dev/api/attendee_search/",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "event",
+              "value": "96868"
+            },
+            {
+              "name": "chapter",
+              "value": "642"
+            },
+            {
+              "name": "search",
+              "value": "={{ $json['Email Address'] }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "csrftoken=YVxnSgex7DNpJ1TcqAtTLZq0RggUGELB29wjCvsrEzWAedxoLuOjGSAMsxJ0SnbE; sessionid=e8v67n7yfjdals3vz5v9yhksr26a3mnq; "
+            },
+            {
+              "name": "Referer",
+              "value": "https://gdg.community.dev/dashboard/gdg-jakarta/events/96868/registrations"
+            },
+            {
+              "name": "X-Csrftoken",
+              "value": "kvMkSiMZK1byJ2HVzZsbbXi8rjz974HVoJLgCx0ThXkJeel7UTNB6QsU2A2fjN7Y"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "75ddc759-4575-4e90-8624-801ab252d5d1",
+      "name": "Get attendee by email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1180,
+        880
+      ],
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "d6f3b95c-7be7-4095-b11d-7fb9b154edce",
+      "name": "Loop Item Overdue",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        940,
+        600
+      ],
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "69421577-e2c9-4223-ba03-85eb279d31ca",
+      "name": "Loop Item Paid",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        940,
+        880
+      ],
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "3461b3e4-e8eb-445b-b1dd-bd4a7bbd40fc",
+      "name": "Loop Item Accepted",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        940,
+        160
+      ],
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "9449d841-f5d0-4727-8b8b-44fd6847049c",
+      "name": "Loop Item Rejected",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        940,
+        380
+      ],
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0ccf9f4a-53d7-4dd7-8450-83ca8e372c0e",
+              "leftValue": "={{ $json['Attendee Status'] }}",
+              "rightValue": "REJECTED",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "79f1b1ca-581f-469a-9099-f8591b68e7b3",
+              "leftValue": "={{ $json['Email Address'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "d30fc43d-0e1a-45c2-926f-512bbf46c934",
+              "leftValue": "={{ $json['Automation Status'] }}",
+              "rightValue": "REJECTED EMAIL SENT",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "6ea4226b-3a0d-41bf-b68d-c313efa3e897",
+      "name": "Check if attendee status is REJECTED",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        680,
+        380
+      ],
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0ccf9f4a-53d7-4dd7-8450-83ca8e372c0e",
+              "leftValue": "={{ $json['Attendee Status'] }}",
+              "rightValue": "OVERDUE",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "79f1b1ca-581f-469a-9099-f8591b68e7b3",
+              "leftValue": "={{ $json['Email Address'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "fae68fca-84ed-4a8f-908b-5c2332f63931",
+              "leftValue": "={{ $json['Automation Status'] }}",
+              "rightValue": "OVERDUE EMAIL SENT",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "b33d4af0-d031-4535-b893-63704ea06e30",
+      "name": "Check if attendee status is OVERDUE",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        680,
+        600
+      ],
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0ccf9f4a-53d7-4dd7-8450-83ca8e372c0e",
+              "leftValue": "={{ $json['Attendee Status'] }}",
+              "rightValue": "FEE HAS BEEN PAID",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "79f1b1ca-581f-469a-9099-f8591b68e7b3",
+              "leftValue": "={{ $json['Email Address'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "bc490663-2c3a-44c5-8248-618b20b1000b",
+              "leftValue": "={{ $json['Automation Status'] }}",
+              "rightValue": "ADDED TO TICKET",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            },
+            {
+              "id": "c6fc6331-dce1-4a39-9778-478ccdcd18e8",
+              "leftValue": "={{ $json.Session }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "64421a65-5ffc-41c7-932b-10a22641fa9f",
+      "name": "Check if attendee status is FEE HAS BEEN PAID",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        680,
+        880
+      ],
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0ccf9f4a-53d7-4dd7-8450-83ca8e372c0e",
+              "leftValue": "={{ $json['Attendee Status'] }}",
+              "rightValue": "ACCEPTED",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "79f1b1ca-581f-469a-9099-f8591b68e7b3",
+              "leftValue": "={{ $json['Email Address'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "6ebad828-b75b-43de-8da6-bb1d6d66043c",
+              "leftValue": "={{ $json['Automation Status'] }}",
+              "rightValue": "ACCEPTANCE EMAIL SENT",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "0542c77d-9182-4627-a1f9-b89846c2b945",
+      "name": "Check if attendee status is ACCEPTED",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        680,
+        160
+      ],
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://gdg.community.dev/api/attendee_search/",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "event",
+              "value": "96868"
+            },
+            {
+              "name": "chapter",
+              "value": "642"
+            },
+            {
+              "name": "search",
+              "value": "={{ $('Check if attendee status is FEE HAS BEEN PAID').item.json.Session }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "csrftoken=YVxnSgex7DNpJ1TcqAtTLZq0RggUGELB29wjCvsrEzWAedxoLuOjGSAMsxJ0SnbE; sessionid=e8v67n7yfjdals3vz5v9yhksr26a3mnq; "
+            },
+            {
+              "name": "Referer",
+              "value": "https://gdg.community.dev/dashboard/gdg-jakarta/events/96868/registrations"
+            },
+            {
+              "name": "X-Csrftoken",
+              "value": "kvMkSiMZK1byJ2HVzZsbbXi8rjz974HVoJLgCx0ThXkJeel7UTNB6QsU2A2fjN7Y"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "488c25aa-8214-4c8d-9bcd-87aaa9282ce0",
+      "name": "Get Participants Session Ticket",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1640,
+        720
+      ],
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "811adf73-39f8-496c-a226-cac860b18f6b",
+              "leftValue": "={{ $json.body.count }}",
+              "rightValue": 200,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            },
+            {
+              "id": "7cf82016-b255-402a-9c11-aca496aa19d4",
+              "leftValue": "={{ $('Check if attendee status is FEE HAS BEEN PAID').item.json.Session }}",
+              "rightValue": "Morning Session",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "27cb500a-2d40-4f7c-bd2a-8ad921c8100f",
+      "name": "If morning session less than 200",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2100,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bb71bf2e-ec20-4a2f-a5a1-16671c7fbea3",
+              "leftValue": "={{ $('Check if attendee status is FEE HAS BEEN PAID').item.json.Session }}",
+              "rightValue": "Morning Session",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "844a67eb-4803-40f3-8a2b-94592f87fc02",
+      "name": "Check session is morning",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1880,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g",
+          "mode": "list",
+          "cachedResultName": "I/O Extended Jakarta 2025 - Interest Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1673386161,
+          "mode": "list",
+          "cachedResultName": "Curation Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit#gid=1673386161"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Loop Item Paid').item.json['Email Address'] }}",
+            "Automation Status": "ADDED TO TICKET MORNING SESSION"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Attendee Status",
+              "displayName": "Attendee Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Session",
+              "displayName": "Session",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Commitment Fee Deadline",
+              "displayName": "Commitment Fee Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Institution/Company",
+              "displayName": "Institution/Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "YoE",
+              "displayName": "YoE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LinkedIn",
+              "displayName": "LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1bf37f4f-96fb-4962-9461-d790c8a8151a",
+      "name": "Update automation status to ADDED TO TICKET MORNING SESSION",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2800,
+        620
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "811adf73-39f8-496c-a226-cac860b18f6b",
+              "leftValue": "={{ $json.body.count }}",
+              "rightValue": 200,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            },
+            {
+              "id": "7cf82016-b255-402a-9c11-aca496aa19d4",
+              "leftValue": "={{ $('Check if attendee status is FEE HAS BEEN PAID').item.json.Session }}",
+              "rightValue": "Afternoon Session",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "4078d6cd-3a64-4623-adf8-79a059a65e2d",
+      "name": "If afternoon session less than 200",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2100,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g",
+          "mode": "list",
+          "cachedResultName": "I/O Extended Jakarta 2025 - Interest Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1673386161,
+          "mode": "list",
+          "cachedResultName": "Curation Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit#gid=1673386161"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Loop Item Paid').item.json['Email Address'] }}",
+            "Automation Status": "ADDED TO TICKET AFTERNOON SESSION"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Attendee Status",
+              "displayName": "Attendee Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Session",
+              "displayName": "Session",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Commitment Fee Deadline",
+              "displayName": "Commitment Fee Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Institution/Company",
+              "displayName": "Institution/Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "YoE",
+              "displayName": "YoE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LinkedIn",
+              "displayName": "LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dfb84bff-9462-4d83-b24b-319320fca0e6",
+      "name": "Update automation status to ADDED TO TICKET AFTERNOON SESSION",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2800,
+        840
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "de0aaaa2-d3c6-4141-a113-4fcec243172c",
+              "leftValue": "={{ $json['Commitment Fee Deadline'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "3ac37360-5795-4bc0-a817-2de6b2de1541",
+      "name": "If commitment fee deadline is empty",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1180,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bb71bf2e-ec20-4a2f-a5a1-16671c7fbea3",
+              "leftValue": "={{ $('Check if attendee status is FEE HAS BEEN PAID').item.json.Session }}",
+              "rightValue": "Morning Session",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "7eabfbe6-16cd-466a-830a-9150ecfeaf44",
+      "name": "Check session registered is morning",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2240,
+        1080
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gdg.community.dev/api/rsvp-event/order/maa-creation-finalization/",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "event",
+              "value": "96868"
+            },
+            {
+              "name": "chapter",
+              "value": "642"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "sessionid=e8v67n7yfjdals3vz5v9yhksr26a3mnq; csrftoken=YVxnSgex7DNpJ1TcqAtTLZq0RggUGELB29wjCvsrEzWAedxoLuOjGSAMsxJ0SnbE"
+            },
+            {
+              "name": "X-Csrftoken",
+              "value": "7S0b1RR9bl5zfFmenxBp1du16RBCcp4nb6Z7L653IheKKR0qIrWPW6ENH84Io8uq"
+            },
+            {
+              "name": "Referer",
+              "value": "https://gdg.community.dev/dashboard/gdg-jakarta/events/96868/registrations"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"attendee\": {\n    \"first_name\": \"{{ (() => {\n      const fullName = $('Loop Item Paid').item.json['Full Name']?.trim() || $('Loop Item Paid').item.json['Full Name']?.split('@')[0] || 'Unknown';\n      const parts = fullName.split(/\\s+/);\n      if (parts.length === 1) return parts[0];\n      if (parts.length === 2) return parts[0];\n      return parts.slice(0, -1).join(' ');\n    })() }}\",\n    \"last_name\": \"{{ (() => {\n      const fullName = $('Loop Item Paid').item.json['Full Name']?.trim() || $('Loop Item Paid').item.json['Full Name']?.split('@')[0] || 'Unknown';\n      const parts = fullName.split(/\\s+/);\n      return parts.length === 1 ? parts[0] : parts[parts.length - 1];\n    })() }}\",\n    \"email\": \"{{ $('Loop Item Paid').item.json['Email Address'] }}\"\n  },\n  \"ticket\": 48510,\n  \"signup_consent\": true,\n  \"send_confirmation_email\": true\n}\n",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "734f0241-6f9b-4265-abdf-508ebe992740",
+      "name": "Add Attendee to Morning Session Ticket",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2380,
+        600
+      ],
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gdg.community.dev/api/rsvp-event/order/maa-creation-finalization/",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "event",
+              "value": "96868"
+            },
+            {
+              "name": "chapter",
+              "value": "642"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Cookie",
+              "value": "sessionid=e8v67n7yfjdals3vz5v9yhksr26a3mnq; csrftoken=YVxnSgex7DNpJ1TcqAtTLZq0RggUGELB29wjCvsrEzWAedxoLuOjGSAMsxJ0SnbE"
+            },
+            {
+              "name": "X-Csrftoken",
+              "value": "7S0b1RR9bl5zfFmenxBp1du16RBCcp4nb6Z7L653IheKKR0qIrWPW6ENH84Io8uq"
+            },
+            {
+              "name": "Referer",
+              "value": "https://gdg.community.dev/dashboard/gdg-jakarta/events/96868/registrations"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"attendee\": {\n    \"first_name\": \"{{ (() => {\n      const fullName = $('Loop Item Paid').item.json['Full Name']?.trim() || $('Loop Item Paid').item.json['Full Name']?.split('@')[0] || 'Unknown';\n      const parts = fullName.split(/\\s+/);\n      if (parts.length === 1) return parts[0];\n      if (parts.length === 2) return parts[0];\n      return parts.slice(0, -1).join(' ');\n    })() }}\",\n    \"last_name\": \"{{ (() => {\n      const fullName = $('Loop Item Paid').item.json['Full Name']?.trim() || $('Loop Item Paid').item.json['Full Name']?.split('@')[0] || 'Unknown';\n      const parts = fullName.split(/\\s+/);\n      return parts.length === 1 ? parts[0] : parts[parts.length - 1];\n    })() }}\",\n    \"email\": \"{{ $('Loop Item Paid').item.json['Email Address'] }}\"\n  },\n  \"ticket\": 48510,\n  \"signup_consent\": true,\n  \"send_confirmation_email\": true\n}\n",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "47f6e08f-e4d1-4f19-875b-c7fa68f624c7",
+      "name": "Add Attendee to Afternoon Session Ticket",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2380,
+        820
+      ],
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Attendee Status Triggered": {
+      "main": [
+        [
+          {
+            "node": "Check if attendee status is ACCEPTED",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Check if attendee status is REJECTED",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Check if attendee status is FEE HAS BEEN PAID",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Check if attendee status is OVERDUE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Commitment Fee Deadline": {
+      "main": [
+        [
+          {
+            "node": "Check if commitment fee deadline is not empty",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update attendee status to ERROR ON CURATED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if commitment fee deadline is not empty": {
+      "main": [
+        [
+          {
+            "node": "Send accepted email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [
+          {
+            "node": "Update attendee status to ERROR ON CURATED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send accepted email": {
+      "main": [
+        [
+          {
+            "node": "Update automation status to ACCEPTANCE EMAIL SENT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update attendee status to ERROR ON CURATED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send rejected email": {
+      "main": [
+        [
+          {
+            "node": "Update automation status to REJECTED EMAIL SENT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update attendee status to ERROR ON CURATED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send overdue email": {
+      "main": [
+        [
+          {
+            "node": "Update automation status to OVERDUE EMAIL SENT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update attendee status to ERROR ON CURATED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate UUID": {
+      "main": [
+        [
+          {
+            "node": "Resend Event Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update attendee status to ERROR ON CURATED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If attendee has not been added": {
+      "main": [
+        [
+          {
+            "node": "Get Participants Session Ticket",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate UUID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get attendee by email": {
+      "main": [
+        [
+          {
+            "node": "If attendee has not been added",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update attendee status to ERROR ON CURATED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update automation status to OVERDUE EMAIL SENT": {
+      "main": [
+        [
+          {
+            "node": "Loop Item Overdue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update automation status to ACCEPTANCE EMAIL SENT": {
+      "main": [
+        [
+          {
+            "node": "Loop Item Accepted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update automation status to REJECTED EMAIL SENT": {
+      "main": [
+        [
+          {
+            "node": "Loop Item Rejected",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Item Overdue": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send overdue email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Item Paid": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get attendee by email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Item Rejected": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send rejected email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if attendee status is REJECTED": {
+      "main": [
+        [
+          {
+            "node": "Loop Item Rejected",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if attendee status is OVERDUE": {
+      "main": [
+        [
+          {
+            "node": "Loop Item Overdue",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [
+          {
+            "node": "Update attendee status to ERROR ON CURATED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if attendee status is FEE HAS BEEN PAID": {
+      "main": [
+        [
+          {
+            "node": "Loop Item Paid",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [
+          {
+            "node": "Update attendee status to ERROR ON CURATED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if attendee status is ACCEPTED": {
+      "main": [
+        [
+          {
+            "node": "Loop Item Accepted",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [
+          {
+            "node": "Update attendee status to ERROR ON CURATED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If morning session less than 200": {
+      "main": [
+        [
+          {
+            "node": "Add Attendee to Morning Session Ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Participants Session Ticket": {
+      "main": [
+        [
+          {
+            "node": "Check session is morning",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update attendee status to ERROR ON CURATED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check session is morning": {
+      "main": [
+        [
+          {
+            "node": "If morning session less than 200",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If afternoon session less than 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If afternoon session less than 200": {
+      "main": [
+        [
+          {
+            "node": "Add Attendee to Afternoon Session Ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update automation status to ADDED TO TICKET MORNING SESSION": {
+      "main": [
+        [
+          {
+            "node": "Loop Item Paid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update automation status to ADDED TO TICKET AFTERNOON SESSION": {
+      "main": [
+        [
+          {
+            "node": "Loop Item Paid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Item Accepted": {
+      "main": [
+        [],
+        [
+          {
+            "node": "If commitment fee deadline is empty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If commitment fee deadline is empty": {
+      "main": [
+        [
+          {
+            "node": "Update Commitment Fee Deadline",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update automation status to ACCEPTANCE EMAIL SENT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resend Event Email": {
+      "main": [
+        [
+          {
+            "node": "Check session registered is morning",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update attendee status to ERROR ON CURATED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check session registered is morning": {
+      "main": [
+        [
+          {
+            "node": "Update automation status to ADDED TO TICKET MORNING SESSION",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update automation status to ADDED TO TICKET AFTERNOON SESSION",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Attendee to Morning Session Ticket": {
+      "main": [
+        [
+          {
+            "node": "Update automation status to ADDED TO TICKET MORNING SESSION",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update attendee status to ERROR ON CURATED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Attendee to Afternoon Session Ticket": {
+      "main": [
+        [
+          {
+            "node": "Update automation status to ADDED TO TICKET AFTERNOON SESSION",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update attendee status to ERROR ON CURATED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "de044c7b-dd29-4f01-8723-cdc515adab92",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "496db227451f90ed7caa7ec4cceb57d946f3edcf2e38a2d5c1a3c7afe039993c"
+  },
+  "id": "dKzHxqEM5lO5dpej",
+  "tags": []
+}

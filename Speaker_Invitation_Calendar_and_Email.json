@@ -1,0 +1,798 @@
+{
+  "name": "Speaker Invitation Calendar and Email",
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6aff05cf-0e70-42f6-adbd-d9625861b0bd",
+              "leftValue": "={{ $json.labelIds.filter(item => item == \"SENT\") }}",
+              "rightValue": "SENT",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "472501b2-8750-46a3-9e28-c33bb6e1425c",
+      "name": "Check if email successfully sent",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1000,
+        860
+      ],
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "Automation triggered on rowAdded from Google Form",
+        "height": 80,
+        "width": 218.6088707718815,
+        "color": 3
+      },
+      "id": "738d7e42-a29d-48f7-89e1-08791ecd7b8a",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -680,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "5770362b-cd98-4baf-b0cf-7723a133ba7f",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -260,
+        660
+      ]
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo",
+          "mode": "list",
+          "cachedResultName": "I/O Extended Jakarta 2025 - Speaker Confirmation (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 677199681,
+          "mode": "list",
+          "cachedResultName": "Speaker Status",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo/edit#gid=677199681"
+        },
+        "event": "rowAdded",
+        "options": {
+          "dataLocationOnSheet": {
+            "values": {
+              "rangeDefinition": "specifyRangeA1",
+              "range": "A1:Z999999"
+            }
+          }
+        }
+      },
+      "id": "68a5b5a8-c71c-4ff5-b783-254fcd6d1c99",
+      "name": "Speaker fill the form",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -680,
+        660
+      ],
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "n59zLQzKnunYPchk",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo",
+          "mode": "list",
+          "cachedResultName": "I/O Extended Jakarta 2025 - Speaker Confirmation (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 677199681,
+          "mode": "list",
+          "cachedResultName": "Speaker Status",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo/edit#gid=677199681"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Check if required field is not empty').item.json['Email Address'] }}",
+            "Automation Status": "INVITATION EMAIL SENT"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fda5d49d-60f7-49c9-9577-7f1afd248109",
+      "name": "Update automation status to INVITATION EMAIL SENT",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1280,
+        500
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo",
+          "mode": "list",
+          "cachedResultName": "I/O Extended Jakarta 2025 - Speaker Confirmation (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 677199681,
+          "mode": "list",
+          "cachedResultName": "Speaker Status",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo/edit#gid=677199681"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Check if required field is not empty').item.json['Email Address'] }}",
+            "Automation Status": "INVITATION EMAIL FAILED"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d209b0f4-5ac5-45a0-a9ca-10b8f7f28142",
+      "name": "Update automation status to INVITATION EMAIL FAILED",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1280,
+        740
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo",
+          "mode": "list",
+          "cachedResultName": "I/O Extended Jakarta 2025 - Speaker Confirmation (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 677199681,
+          "mode": "list",
+          "cachedResultName": "Speaker Status",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo/edit#gid=677199681"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Check if required field is not empty').item.json['Email Address'] }}",
+            "Automation Status": "ERROR ON INVITATION"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "22e6f573-8aa5-4a23-aa2d-09254230d458",
+      "name": "Update automation status to ERROR ON INVITATION",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1280,
+        1140
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Check if required field is not empty').item.json['Email Address'] }}",
+        "subject": "I/O Extended Jakarta 2025 - Speaker Invitation",
+        "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>I/O Extended Jakarta 2025 - Speaker Invitation</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap\" rel=\"stylesheet\">\n    <style>\n      body {\n        margin: 0;\n        padding: 0;\n        font-family: 'Poppins', sans-serif;\n        background-color: #f1f3f4;\n      }\n\n      .container {\n        max-width: 510px;\n        margin: 0 auto;\n        background-color: #fff;\n        padding: 30px;\n      }\n\n      .header-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .center {\n        text-align: center;\n      }\n\n      .start {\n        text-align: start;\n      }\n\n      .btn {\n        display: block;\n        background-color: #4285f4;\n        color: #fff !important;\n        text-align: center;\n        border-radius: 50px;\n        padding: 10px 20px;\n        text-decoration: none;\n        width: 50%;\n        margin: 20px auto;\n      }\n\n      .btn:hover {\n        background-color: #3367d6;\n      }\n\n      .footer-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .footer {\n        margin-top: 24pt;\n        padding: 18pt 18pt 18pt 18pt;\n        background-color: #f0f0f0;\n      }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <div class=\"center\">\n        <img src=\"https://i.imgur.com/ygRKd0K.png\" alt=\"Header\" class=\"header-img\">\n      </div>\n      <div class=\"start\">\n        <h2>Hi {{ $('Check if required field is not empty').item.json.Name }},</h2>\n      </div>\n      <div class=\"start\">\n        <p>Thank you for your time and commitment to speak about <strong>{{ $('Check if required field is not empty').item.json['Talk Title'] }}</strong> at <strong>I/O Extended Jakarta 2025</strong>! We truly appreciate your contribution to making this event insightful and inspiring.</p>\n        <p>To help you prepare, we've put together a <strong>Speaker Handbook</strong> with all the essential information, tips, and logistics you'll need for the event.</p>\n        <a href=\"https://gdgjakarta.com/speaker-handbook-iox-25\" class=\"btn\">Open Speaker Handbook</a>\n        <p>If you have any questions or need further assistance, feel free to reach out to us at <a href=\"mailto:info@gdgjakarta.org\">info@gdgjakarta.org</a>.</p>\n        <p>We’re excited to collaborate with you and can't wait to see you at <strong>I/O Extended Jakarta 2025</strong>!</p>\n      </div>\n      <div class=\"center\">\n        <div class=\"footer\">\n          <span style=\"overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 113.00px; height: 61.13px;\">\n            <img alt=\"footer\" src=\"https://i.imgur.com/9Bwmfvj.png\" style=\"width: 113.00px; height: 61.13px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);\" title=\"\">\n          </span>\n        </div>\n      </div>\n    </div>\n  </body>\n</html>",
+        "options": {
+          "appendAttribution": true
+        }
+      },
+      "id": "d11eef27-0c74-42e0-9cbc-23c1097228a5",
+      "name": "Send invitation email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        520,
+        700
+      ],
+      "webhookId": "d76d00f8-6da8-45ca-9fd0-0adf5fb2afc9",
+      "retryOnFail": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ItMwLZ1IpafPGMLH",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "Please adjust the condition to get ID based on Calendar Title",
+        "height": 80,
+        "width": 195.75641175548807
+      },
+      "id": "d508d47f-94e7-438c-ab55-2d7756c34d6f",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/calendar/v3/calendars/primary/events",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleCalendarOAuth2Api",
+        "options": {}
+      },
+      "id": "9979369d-46cd-4620-9a9e-cd40aca9b2d3",
+      "name": "Get calendar events",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -100,
+        880
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "kY5VBjkPS0PfIa1N",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://www.googleapis.com/calendar/v3/calendars/primary/events/{{ $json.items.filter(item => item.summary == \"I/O Extended Jakarta 2025\").last().id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleCalendarOAuth2Api",
+        "options": {}
+      },
+      "id": "2e901b7d-ec70-455e-ba7e-298b8d2510d8",
+      "name": "Get event",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        880
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "kY5VBjkPS0PfIa1N",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $json.creator.email }}",
+          "mode": "id"
+        },
+        "eventId": "={{ $json.id }}",
+        "updateFields": {
+          "attendeesUi": {
+            "values": {
+              "attendees": [
+                "={{ $('Check if required field is not empty').item.json['Email Address'] }}"
+              ]
+            }
+          },
+          "sendUpdates": "all"
+        }
+      },
+      "id": "42cd558c-0e8e-4489-8101-bf05cc611f89",
+      "name": "Invite to calendar",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.2,
+      "position": [
+        520,
+        960
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "kY5VBjkPS0PfIa1N",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Create the event calendar before run this workflow",
+        "height": 80,
+        "width": 189.03510028007827,
+        "color": 5
+      },
+      "id": "bd228c20-0fe4-498f-8692-5d39778ce169",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -380,
+        900
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6aff05cf-0e70-42f6-adbd-d9625861b0bd",
+              "leftValue": "={{ $json.attendees.map(item => item.email) }}",
+              "rightValue": "={{ $('Check if required field is not empty').item.json['Email Address'] }}",
+              "operator": {
+                "type": "array",
+                "operation": "contains",
+                "rightType": "any"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ea41d579-b34b-4c95-a4da-64d5ae0ef68b",
+      "name": "Check if calendar successfully invited",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        760,
+        940
+      ],
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f1a79257-3925-40c8-8637-8e27caa2f124",
+              "leftValue": "={{ $json.attendees.map(item => item.email) }}",
+              "rightValue": "={{ $('Check if required field is not empty').item.json['Email Address'] }}",
+              "operator": {
+                "type": "array",
+                "operation": "contains",
+                "rightType": "any"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "8c4ccc14-c476-4077-a02f-08a74c288f18",
+      "name": "Check is speaker invited",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        260,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4d8af12f-0900-4af3-9871-1f30e633681f",
+              "leftValue": "={{ $json['Email Address'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "81e41697-e4e9-46f4-9f7c-0e98ba8086f1",
+              "leftValue": "={{ $json['Name'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "20b57693-b03e-4466-87df-76058316f3cd",
+              "leftValue": "={{ $json['Talk Title'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "d8c664f8-0675-4793-a251-69a746830e1a",
+              "leftValue": "={{ $json['Automation Status'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "1e4fd604-7932-47ed-88fb-e34f415d53ef",
+      "name": "Check if required field is not empty",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -480,
+        660
+      ],
+      "retryOnFail": false
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Check if email successfully sent": {
+      "main": [
+        [
+          {
+            "node": "Update automation status to INVITATION EMAIL SENT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update automation status to INVITATION EMAIL FAILED",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update automation status to ERROR ON INVITATION",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Speaker fill the form": {
+      "main": [
+        [
+          {
+            "node": "Check if required field is not empty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update automation status to INVITATION EMAIL SENT": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send invitation email": {
+      "main": [
+        [
+          {
+            "node": "Check if email successfully sent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update automation status to ERROR ON INVITATION",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get calendar events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get calendar events": {
+      "main": [
+        [
+          {
+            "node": "Get event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if calendar successfully invited": {
+      "main": [
+        [
+          {
+            "node": "Send invitation email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update automation status to INVITATION EMAIL FAILED",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update automation status to ERROR ON INVITATION",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Invite to calendar": {
+      "main": [
+        [
+          {
+            "node": "Check if calendar successfully invited",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get event": {
+      "main": [
+        [
+          {
+            "node": "Check is speaker invited",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check is speaker invited": {
+      "main": [
+        [
+          {
+            "node": "Send invitation email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Invite to calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if required field is not empty": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e65b16a7-d0e1-4e7e-8c1e-6d0cab89217a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "496db227451f90ed7caa7ec4cceb57d946f3edcf2e38a2d5c1a3c7afe039993c"
+  },
+  "id": "RKeYNkXAeVvYJboV",
+  "tags": []
+}

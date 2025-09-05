@@ -1,0 +1,470 @@
+{
+  "name": "Speaker Confirmation Email",
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6aff05cf-0e70-42f6-adbd-d9625861b0bd",
+              "leftValue": "={{ $json.labelIds.filter(item => item == \"SENT\") }}",
+              "rightValue": "SENT",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "d98208d1-2444-41cb-9e3b-74284cdf6e35",
+      "name": "Check if email successfully sent",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        500,
+        740
+      ],
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "Automation triggered on rowAdded from Google Form",
+        "height": 80,
+        "width": 218.6088707718815,
+        "color": 3
+      },
+      "id": "ad95f30c-3cea-45fb-95b3-bd083b65c613",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -680,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "73347730-51b3-4e2e-8c5f-f77cbcaacdb4",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -260,
+        660
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4d8af12f-0900-4af3-9871-1f30e633681f",
+              "leftValue": "={{ $json['Email Address'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "81e41697-e4e9-46f4-9f7c-0e98ba8086f1",
+              "leftValue": "={{ $json['Name'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "85c81214-d612-4631-8adc-20f579690c9d",
+              "leftValue": "={{ $json['Automation Status'] }}",
+              "rightValue": "SEND EMAIL",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "9b5dc918-905c-4d8e-ac51-be1ef66ab796",
+      "name": "Check if email and name is not empty",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -480,
+        660
+      ],
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "content": "Create the event calendar before run this workflow",
+        "height": 80,
+        "width": 189.03510028007827,
+        "color": 5
+      },
+      "id": "ae8f46fe-7185-4e40-994a-8c12f5272122",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -380,
+        900
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Check if email and name is not empty').item.json['Email Address'] }}",
+        "subject": "I/O Extended Jakarta 2025 - Speaker Confirmation",
+        "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>I/O Extended Jakarta 2025 - Speaker Confirmation</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap\" rel=\"stylesheet\" />\n    <style>\n      body {\n        margin: 0;\n        padding: 0;\n        font-family: 'Poppins', sans-serif;\n        background-color: #f1f3f4;\n      }\n\n      .container {\n        max-width: 510px;\n        margin: 0 auto;\n        background-color: #fff;\n        padding: 30px;\n      }\n\n      .header-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .center {\n        text-align: center;\n      }\n\n      .start {\n        text-align: start;\n      }\n\n      .btn {\n        display: block;\n        background-color: #4285f4;\n        color: #fff !important;\n        text-align: center;\n        border-radius: 50px;\n        padding: 10px 20px;\n        text-decoration: none;\n        width: 60%;\n        margin: 20px auto;\n      }\n\n      .btn:hover {\n        background-color: #3367d6;\n      }\n\n      .footer-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .footer {\n        margin-top: 24pt;\n        padding: 18pt;\n        background-color: #f0f0f0;\n      }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <div class=\"center\">\n        <img src=\"https://i.imgur.com/ygRKd0K.png\" alt=\"Header\" class=\"header-img\" />\n      </div>\n      <div class=\"start\">\n        <h2>Hi {{ $json['Name'] }},</h2>\n      </div>\n      <div class=\"start\">\n        <p>Thank you once again for agreeing to speak at <strong>Google I/O Extended Jakarta 2025</strong> — we’re thrilled to have you on board! </p>\n        <p>This email is to confirm your session with us. We’re looking forward to your talk scheduled for <strong>August 2, 2025</strong>. </p>\n        <p>Please find the <strong>Speaker Handbook</strong> attached after you fill the form, which includes key information on the event format, technical requirements, timing, and tips to help ensure everything runs smoothly. </p>\n        <p>For promotional purposes, we’d appreciate it if you could complete the form below by <strong>July 10, 2025</strong>. </p>\n        <a href=\"https://gdgjakarta.com/speaker-confirm-iox-25\" class=\"btn\">Complete Speaker Form</a>\n        <p>If you have any questions or need support, feel free to reach out to us anytime at <a href=\"mailto:info@gdgjakarta.org\">info@gdgjakarta.org\n          </a></p>\n        <p>We truly appreciate your contribution and can’t wait to share your insights with our audience at <strong>Google I/O Extended Jakarta 2025</strong>. </p>\n      </div>\n      <div class=\"center\">\n        <div class=\"footer\">\n          <img alt=\"footer\" src=\"https://i.imgur.com/9Bwmfvj.png\" style=\"width: 113px; height: 61.13px;\" />\n        </div>\n      </div>\n    </div>\n    <script data-cfasync=\"false\" src=\"/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js\"></script>\n  </body>\n</html>",
+        "options": {
+          "appendAttribution": true
+        }
+      },
+      "id": "e6842fdd-1d61-4022-adcd-83153b5e1ad8",
+      "name": "Send confirmation email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        20,
+        740
+      ],
+      "webhookId": "daec308e-f6b8-43b6-8438-9e754e576be0",
+      "retryOnFail": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ItMwLZ1IpafPGMLH",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo",
+          "mode": "list",
+          "cachedResultName": "I/O Extended Jakarta 2025 - Speaker Confirmation (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 990249657,
+          "mode": "list",
+          "cachedResultName": "Speaker Init",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo/edit#gid=990249657"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Check if email and name is not empty').item.json['Email Address'] }}",
+            "Automation Status": "ERROR ON WORKFLOW"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a36fe67a-3b29-4ce0-8546-d61896fa255b",
+      "name": "Update automation status to ERROR ON WORKFLOW",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1060,
+        960
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo",
+          "mode": "list",
+          "cachedResultName": "I/O Extended Jakarta 2025 - Speaker Confirmation (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 990249657,
+          "mode": "list",
+          "cachedResultName": "Speaker Init",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo/edit#gid=990249657"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Check if email and name is not empty').item.json['Email Address'] }}",
+            "Automation Status": "EMAIL SENT"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "612911e0-e39d-476b-af09-ec33495fba90",
+      "name": "Update automation status to EMAIL SENT",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1040,
+        500
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo",
+          "mode": "list",
+          "cachedResultName": "I/O Extended Jakarta 2025 - Speaker Confirmation (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 990249657,
+          "mode": "list",
+          "cachedResultName": "Speaker Init",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Rf3O_jrKVGmFnFfCqKMtXy6tQkvTObfgP7exq0JPPbo/edit#gid=990249657"
+        },
+        "options": {
+          "dataLocationOnSheet": {
+            "values": {
+              "rangeDefinition": "specifyRangeA1",
+              "range": "A1:Z999999"
+            }
+          }
+        }
+      },
+      "id": "db458310-d673-4f86-8e8d-f343581a52c9",
+      "name": "Organizer fill the email and name",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -680,
+        660
+      ],
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "n59zLQzKnunYPchk",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Check if email successfully sent": {
+      "main": [
+        [
+          {
+            "node": "Update automation status to EMAIL SENT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update automation status to ERROR ON WORKFLOW",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update automation status to ERROR ON WORKFLOW",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if email and name is not empty": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send confirmation email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send confirmation email": {
+      "main": [
+        [
+          {
+            "node": "Check if email successfully sent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update automation status to ERROR ON WORKFLOW",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update automation status to EMAIL SENT": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Organizer fill the email and name": {
+      "main": [
+        [
+          {
+            "node": "Check if email and name is not empty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "25f9a2c3-4d28-49a2-ba45-d8e4f25798ea",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "496db227451f90ed7caa7ec4cceb57d946f3edcf2e38a2d5c1a3c7afe039993c"
+  },
+  "id": "2MWYKiGw4IDwCp3Q",
+  "tags": []
+}

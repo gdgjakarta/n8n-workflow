@@ -6,7 +6,7 @@
         "pollTimes": {
           "item": [
             {
-              "mode": "everyHour"
+              "mode": "everyMinute"
             }
           ]
         },
@@ -39,9 +39,10 @@
       "type": "n8n-nodes-base.googleSheetsTrigger",
       "typeVersion": 1,
       "position": [
-        -1824,
-        -912
+        -1984,
+        -768
       ],
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsTriggerOAuth2Api": {
           "id": "n59zLQzKnunYPchk",
@@ -84,7 +85,7 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "Email Address": "={{ $json['Email Address'] }}",
+            "Email Address": "={{ $('Accepted Loop').item.json['Email Address'] }}",
             "Commitment Fee Deadline": "={{ DateTime.now().plus({ days: 2 }).toFormat(\"LLLL d, yyyy\") }}"
           },
           "matchingColumns": [
@@ -134,6 +135,16 @@
             {
               "id": "Work Email",
               "displayName": "Work Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Session",
+              "displayName": "Session",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -222,7 +233,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        -928,
+        -416,
         -1392
       ],
       "retryOnFail": true,
@@ -236,43 +247,7 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "79f1b1ca-581f-469a-9099-f8591b68e7b3",
-              "leftValue": "={{ $json['Commitment Fee Deadline'] }}",
-              "rightValue": "",
-              "operator": {
-                "type": "string",
-                "operation": "notEmpty",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "0596a4aa-b625-40a0-82ac-75db2fe8d637",
-      "name": "Check if commitment fee deadline is not empty",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        -704,
-        -1392
-      ],
-      "retryOnFail": true,
-      "onError": "Handle Error"
-    },
-    {
-      "parameters": {
-        "sendTo": "={{ $('Check if commitment fee deadline is not empty').item.json['Email Address'] }}",
+        "sendTo": "={{ $('Accepted Loop').item.json['Email Address'] }}",
         "subject": "=You're Accepted! – {{ $('Ticket Details Config').item.json.eventName }}",
         "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>You're Accepted! – {{ $('Ticket Details Config').item.json.eventName }}</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap\" rel=\"stylesheet\" />\n    <style>\n      body {\n        margin: 0;\n        padding: 0;\n        font-family: 'Poppins', sans-serif;\n        background-color: #f1f3f4;\n      }\n\n      .container {\n        max-width: 510px;\n        margin: 0 auto;\n        background-color: #fff;\n        padding: 30px;\n      }\n\n      .header-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .center {\n        text-align: center;\n      }\n\n      .start {\n        text-align: start;\n      }\n\n      .btn {\n        display: block;\n        background-color: #4285f4;\n        color: #fff !important;\n        text-align: center;\n        border-radius: 50px;\n        padding: 10px 20px;\n        text-decoration: none;\n        width: 60%;\n        margin: 20px auto;\n      }\n\n      .btn:hover {\n        background-color: #3367d6;\n      }\n\n      .footer-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .footer {\n        margin-top: 24pt;\n        padding: 18pt;\n        background-color: #f0f0f0;\n      }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <div class=\"center\">\n        <img src=\"{{ $('Ticket Details Config').item.json.eventHeaderEmailUrl }}\" alt=\"Header\" class=\"header-img\" />\n      </div>\n      <div class=\"start\">\n        <h2>Hi {{ $('Check if attendee status is ACCEPTED').item.json['Full Name'] }},</h2>\n      </div>\n      <div class=\"start\">\n        <p>Congratulations! You’ve been <strong>officially selected</strong> as a participant for <strong>{{ $('Ticket Details Config').item.json.eventName }}</strong> 🎉</p>\n        <p>We're excited to have you join our curated community of professional developers and innovators at this in-person event!</p>\n        <p>To confirm your spot, please complete the payment via the link below before the deadline.</p>\n        <p>\n          <strong>Payment Deadline:</strong> {{ $('Update Commitment Fee Deadline').item.json['Commitment Fee Deadline'] }}\n        </p>\n        <a href=\"{{ $json.Data.Url }}\" class=\"btn\">Payment Link</a>\n        <p><strong>Note:</strong> Please ensure that the buyer data (Full Name, Email, Phone Number) you enter on the iPaymu payment page is the same as the data you provided in the interest form.</p>\n        <p>Once we receive your payment, you will get your official event ticket and further details including agenda, speakers, and location info.</p>\n        <p>If you have any questions, feel free to reach out to us at <a href=\"mailto:info@gdgjakarta.org\">info@gdgjakarta.org</a>.</p>\n        <p>We can’t wait to welcome you at <strong>{{ $('Ticket Details Config').item.json.eventName }}</strong> 🚀</p>\n      </div>\n      <div class=\"center\">\n        <div class=\"footer\">\n          <img alt=\"footer\" src=\"https://assets.gdgjakarta.org/gdg-jakarta/gdg-sign-bubble-transparent.png\" style=\"width: 113px; height: 61.13px;\" />\n        </div>\n      </div>\n    </div>\n  </body>\n</html>\n",
         "options": {
@@ -284,8 +259,8 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1536,
-        -1520
+        1824,
+        -1312
       ],
       "webhookId": "8d94c874-bc9e-4368-bd8a-65ac06e1b938",
       "retryOnFail": true,
@@ -301,7 +276,7 @@
       "parameters": {
         "sendTo": "={{ $('Rejected Loop').item.json['Email Address'] }}",
         "subject": "=Update on Your Registration – {{ $json.eventName }}",
-        "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Update on Your Registration – {{ $json.eventName }}</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap\" rel=\"stylesheet\" />\n    <style>\n      body {\n        margin: 0;\n        padding: 0;\n        font-family: 'Poppins', sans-serif;\n        background-color: #f1f3f4;\n      }\n\n      .container {\n        max-width: 510px;\n        margin: 0 auto;\n        background-color: #fff;\n        padding: 30px;\n      }\n\n      .header-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .center {\n        text-align: center;\n      }\n\n      .start {\n        text-align: start;\n      }\n\n      .btn {\n        display: block;\n        background-color: #4285f4;\n        color: #fff !important;\n        text-align: center;\n        border-radius: 50px;\n        padding: 10px 20px;\n        text-decoration: none;\n        width: 60%;\n        margin: 20px auto;\n      }\n\n      .btn:hover {\n        background-color: #3367d6;\n      }\n\n      .footer-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .footer {\n        margin-top: 24pt;\n        padding: 18pt;\n        background-color: #f0f0f0;\n      }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <div class=\"center\">\n        <img src=\"{{ $json.eventHeaderEmailUrl }}\" alt=\"Header\" class=\"header-img\" />\n      </div>\n      <div class=\"start\">\n        <h2>Hi {{ $('Rejected Loop').item.json['Full Name'] }},</h2>\n      </div>\n      <div class=\"start\">\n        <p>Thank you for registering your interest in <strong>{{ $json.eventName }}</strong>.</p>\n\n        <p>We’ve received an overwhelming number of amazing submissions, and due to venue capacity limitations, we regret to inform you that we’re unable to offer you an in-person spot this time.</p>\n\n        <p><strong>Please note:</strong> As your registration was not selected for in-person attendance, we kindly ask that you do not come to the venue. Unfortunately, we will not be able to accommodate you on-site, and we will not be responsible for any inconvenience caused by arriving in person. No seating or access will be available without prior confirmation.</p>\n\n        <p><strong>Please also be advised</strong> that any attempt to re-register using a false identity or duplicate/fake email addresses will be considered a serious breach of our registration policy and may be handled accordingly by the organizing team.</p>\n\n        <p><strong>However, we’d still love for you to be a part of the experience!</strong> You’re invited to join us <b>virtually</b> and follow all the event highlights, keynotes, and sessions online.</p>\n\n        <p>No commitment fee is needed for virtual participation, and we’ll be sharing the livestream and session access details with you closer to the event date.</p>\n\n        <a href=\"{{ $json.eventUrl }}\" class=\"btn\">Event Website</a>\n\n        <p>If you have any questions, feel free to reach out to us at <a href=\"mailto:info@gdgjakarta.org\">info@gdgjakarta.org</a>.</p>\n\n        <p>We truly appreciate your enthusiasm and hope to connect with you during <strong>{{ $json.eventName }}</strong> – online!</p>\n      </div>\n      <div class=\"center\">\n        <div class=\"footer\">\n          <img alt=\"footer\" src=\"https://assets.gdgjakarta.org/gdg-jakarta/gdg-sign-bubble-transparent.png\" style=\"width: 113px; height: 61.13px;\" />\n        </div>\n      </div>\n    </div>\n  </body>\n</html>",
+        "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Update on Your Registration – {{ $json.eventName }}</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap\" rel=\"stylesheet\" />\n    <style>\n      body {\n        margin: 0;\n        padding: 0;\n        font-family: 'Poppins', sans-serif;\n        background-color: #f1f3f4;\n      }\n\n      .container {\n        max-width: 510px;\n        margin: 0 auto;\n        background-color: #fff;\n        padding: 30px;\n      }\n\n      .header-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .center {\n        text-align: center;\n      }\n\n      .start {\n        text-align: start;\n      }\n\n      .btn {\n        display: block;\n        background-color: #4285f4;\n        color: #fff !important;\n        text-align: center;\n        border-radius: 50px;\n        padding: 10px 20px;\n        text-decoration: none;\n        width: 60%;\n        margin: 20px auto;\n      }\n\n      .btn:hover {\n        background-color: #3367d6;\n      }\n\n      .footer-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .footer {\n        margin-top: 24pt;\n        padding: 18pt;\n        background-color: #f0f0f0;\n      }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <div class=\"center\">\n        <img src=\"{{ $json.eventHeaderEmailUrl }}\" alt=\"Header\" class=\"header-img\" />\n      </div>\n      <div class=\"start\">\n        <h2>Hi {{ $('Rejected Loop').item.json['Full Name'] }},</h2>\n      </div>\n      <div class=\"start\">\n        <p>Thank you for registering your interest in <strong>{{ $json.eventName }}</strong>.</p>\n\n        <p>We’ve received an overwhelming number of amazing submissions, and due to venue capacity limitations, we regret to inform you that we’re unable to offer you an in-person spot this time.</p>\n\n        <p><strong>Please note:</strong> As your registration was not selected for in-person attendance, we kindly ask that you do not come to the venue. Unfortunately, we will not be able to accommodate you on-site, and we will not be responsible for any inconvenience caused by arriving in person. No seating or access will be available without prior confirmation.</p>\n\n        <p><strong>Please also be advised</strong> that any attempt to re-register using a false identity or duplicate/fake email addresses will be considered a serious breach of our registration policy and may be handled accordingly by the organizing team.</p>\n\n        <p>If you have any questions, feel free to reach out to us at <a href=\"mailto:info@gdgjakarta.org\">info@gdgjakarta.org</a>.</p>\n\n        <p>We truly appreciate your enthusiasm and hope to connect with you in our next event!</p>\n      </div>\n      <div class=\"center\">\n        <div class=\"footer\">\n          <img alt=\"footer\" src=\"https://assets.gdgjakarta.org/gdg-jakarta/gdg-sign-bubble-transparent.png\" style=\"width: 113px; height: 61.13px;\" />\n        </div>\n      </div>\n    </div>\n  </body>\n</html>",
         "options": {
           "appendAttribution": true
         }
@@ -311,8 +286,8 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -928,
-        -992
+        -1088,
+        -848
       ],
       "webhookId": "540b7596-b9f3-4b47-a37f-36ec3edeb477",
       "retryOnFail": true,
@@ -338,8 +313,8 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -928,
-        -704
+        -1088,
+        -560
       ],
       "webhookId": "45c60611-f8c4-45cf-9470-7e0a6def465e",
       "retryOnFail": true,
@@ -350,510 +325,6 @@
         }
       },
       "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "operation": "appendOrUpdate",
-        "documentId": {
-          "__rl": true,
-          "value": "1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg",
-          "mode": "list",
-          "cachedResultName": "Road to DevFest Jakarta 2025 [Season 1] - Interest Form",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 1051899141,
-          "mode": "list",
-          "cachedResultName": "Curation Sheet",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit#gid=1051899141"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "Email Address": "={{ $('Overdue Loop').item.json['Email Address'] }}",
-            "Automation Status": "=OVERDUE EMAIL {{ $json.labelIds[0] }}"
-          },
-          "matchingColumns": [
-            "Email Address"
-          ],
-          "schema": [
-            {
-              "id": "Attendee Status",
-              "displayName": "Attendee Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Automation Status",
-              "displayName": "Automation Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Commitment Fee Deadline",
-              "displayName": "Commitment Fee Deadline",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Email Address",
-              "displayName": "Email Address",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Work Email",
-              "displayName": "Work Email",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Whatsapp Number",
-              "displayName": "Whatsapp Number",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Full Name",
-              "displayName": "Full Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Gender",
-              "displayName": "Gender",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Institution/Company",
-              "displayName": "Institution/Company",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Role",
-              "displayName": "Role",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "YoE",
-              "displayName": "YoE",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "LinkedIn",
-              "displayName": "LinkedIn",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "id": "5f16a062-8771-4b17-aae9-b36017f2b2fc",
-      "name": "Update automation status to OVERDUE EMAIL SENT",
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.5,
-      "position": [
-        -704,
-        -624
-      ],
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "BE69SyJ90j0eJrgx",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "appendOrUpdate",
-        "documentId": {
-          "__rl": true,
-          "value": "1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg",
-          "mode": "list",
-          "cachedResultName": "Road to DevFest Jakarta 2025 [Season 1] - Interest Form",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 1051899141,
-          "mode": "list",
-          "cachedResultName": "Curation Sheet",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit#gid=1051899141"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "Email Address": "={{ $('Rejected Loop').item.json['Email Address'] }}",
-            "Automation Status": "=REJECTED EMAIL {{ $json.labelIds[0] }}"
-          },
-          "matchingColumns": [
-            "Email Address"
-          ],
-          "schema": [
-            {
-              "id": "Attendee Status",
-              "displayName": "Attendee Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Automation Status",
-              "displayName": "Automation Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Commitment Fee Deadline",
-              "displayName": "Commitment Fee Deadline",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Email Address",
-              "displayName": "Email Address",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Work Email",
-              "displayName": "Work Email",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Whatsapp Number",
-              "displayName": "Whatsapp Number",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Full Name",
-              "displayName": "Full Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Gender",
-              "displayName": "Gender",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Institution/Company",
-              "displayName": "Institution/Company",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Role",
-              "displayName": "Role",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "YoE",
-              "displayName": "YoE",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "LinkedIn",
-              "displayName": "LinkedIn",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "id": "5a33db5c-f8eb-4ab3-8800-0207f613f364",
-      "name": "Update automation status to REJECTED EMAIL SENT",
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.5,
-      "position": [
-        -704,
-        -912
-      ],
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "BE69SyJ90j0eJrgx",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "appendOrUpdate",
-        "documentId": {
-          "__rl": true,
-          "value": "1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg",
-          "mode": "list",
-          "cachedResultName": "Road to DevFest Jakarta 2025 [Season 1] - Interest Form",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 1051899141,
-          "mode": "list",
-          "cachedResultName": "Curation Sheet",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit#gid=1051899141"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "Email Address": "={{ $('Check if commitment fee deadline is not empty').item.json['Email Address'] }}",
-            "Automation Status": "=ACCEPTANCE EMAIL {{ $('Send Accepted Email').item.json.labelIds[0] }}"
-          },
-          "matchingColumns": [
-            "Email Address"
-          ],
-          "schema": [
-            {
-              "id": "Attendee Status",
-              "displayName": "Attendee Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Automation Status",
-              "displayName": "Automation Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Commitment Fee Deadline",
-              "displayName": "Commitment Fee Deadline",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Email Address",
-              "displayName": "Email Address",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Work Email",
-              "displayName": "Work Email",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Whatsapp Number",
-              "displayName": "Whatsapp Number",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Full Name",
-              "displayName": "Full Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Gender",
-              "displayName": "Gender",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Institution/Company",
-              "displayName": "Institution/Company",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Role",
-              "displayName": "Role",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "YoE",
-              "displayName": "YoE",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "LinkedIn",
-              "displayName": "LinkedIn",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "id": "7a2bf72d-1e65-4e61-8d21-d6ce9056f233",
-      "name": "Update automation status to ACCEPTANCE EMAIL SENT",
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.5,
-      "position": [
-        1984,
-        -1328
-      ],
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "BE69SyJ90j0eJrgx",
-          "name": "Google Sheets account"
-        }
-      }
     },
     {
       "parameters": {
@@ -906,8 +377,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1600,
-        -912
+        -1760,
+        -768
       ],
       "retryOnFail": true,
       "onError": "Handle Error"
@@ -930,6 +401,16 @@
                 "type": "string",
                 "operation": "equals",
                 "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "0b254c52-a792-4304-9e1d-08a8ca242a21",
+              "leftValue": "={{ $json['Commitment Fee Deadline'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
               }
             },
             {
@@ -973,8 +454,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1600,
-        -624
+        -1760,
+        -480
       ],
       "retryOnFail": true,
       "onError": "Handle Error"
@@ -1040,46 +521,11 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1600,
-        -1328
+        -1760,
+        -1296
       ],
       "retryOnFail": true,
       "onError": "Handle Error"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "loose",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "de0aaaa2-d3c6-4141-a113-4fcec243172c",
-              "leftValue": "={{ $json['Commitment Fee Deadline'] }}",
-              "rightValue": "",
-              "operator": {
-                "type": "string",
-                "operation": "empty",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "looseTypeValidation": true,
-        "options": {}
-      },
-      "id": "25e16b10-e0ed-4a4e-9140-cd8531102cef",
-      "name": "If commitment fee deadline is empty",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        -1152,
-        -1392
-      ]
     },
     {
       "parameters": {
@@ -1110,8 +556,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        192,
-        112
+        256,
+        592
       ],
       "retryOnFail": true,
       "credentials": {
@@ -1152,137 +598,9 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -704,
-        -160
+        -864,
+        288
       ]
-    },
-    {
-      "parameters": {
-        "url": "https://gdg.community.dev/api/attendee_search/",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpCustomAuth",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "event",
-              "value": "={{ $('Bevy Config').item.json.bevyEventId }}"
-            },
-            {
-              "name": "chapter",
-              "value": "={{ $('Bevy Config').item.json.bevyChapterId }}"
-            },
-            {
-              "name": "search",
-              "value": "={{ $('Webhook Response').item.json.body.buyer_email }}"
-            }
-          ]
-        },
-        "options": {
-          "response": {}
-        }
-      },
-      "id": "5a9bee28-e1ec-4c6a-a363-f5a5faa5b843",
-      "name": "Get attendee by email",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -928,
-        -240
-      ],
-      "retryOnFail": true,
-      "credentials": {
-        "httpCustomAuth": {
-          "id": "sNXseg2u7NwkctVY",
-          "name": "Bevy API Auth"
-        }
-      },
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://gdg.community.dev/api/rsvp-event/order/maa-creation-finalization/",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpCustomAuth",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "event",
-              "value": "={{ $('Bevy Config').item.json.bevyEventId }}"
-            },
-            {
-              "name": "chapter",
-              "value": "={{ $('Bevy Config').item.json.bevyChapterId }}"
-            }
-          ]
-        },
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Referer",
-              "value": "=https://gdg.community.dev/dashboard/gdg-jakarta/events/{{ $('Bevy Config').item.json.bevyEventId }}/registrations"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"attendee\": {\n    \"first_name\": \"{{ $('Split Name').item.json.firstName }}\",\n    \"last_name\": \"{{ $('Split Name').item.json.lastName }}\",\n    \"email\": \"{{ $('Webhook Response').item.json.body.buyer_email }}\"\n  },\n  \"ticket\": {{ $('Bevy Config').item.json.bevyRegularTicketId }},\n  \"signup_consent\": true,\n  \"send_confirmation_email\": true\n}\n",
-        "options": {}
-      },
-      "id": "00946a00-5a35-4024-a106-18650070968d",
-      "name": "Add Attendee to Regular Ticket",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        192,
-        -400
-      ],
-      "retryOnFail": true,
-      "credentials": {
-        "httpCustomAuth": {
-          "id": "sNXseg2u7NwkctVY",
-          "name": "Bevy API Auth"
-        }
-      },
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "loose",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "02768ca3-803c-4f51-a558-10d4b5bd6099",
-              "leftValue": "={{ $('If attendee has not been added').item.json.body.results[0].ticket_id }}",
-              "rightValue": "={{ $('Bevy Config').item.json.bevyTicketId }}",
-              "operator": {
-                "type": "number",
-                "operation": "notEquals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "looseTypeValidation": true,
-        "options": {}
-      },
-      "id": "e76864c9-eefd-4a32-baff-fd3631b848db",
-      "name": "If ticket title is not Regular Ticket",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        -480,
-        -96
-      ],
-      "onError": "Handle Error"
     },
     {
       "parameters": {
@@ -1295,7 +613,7 @@
           "parameters": [
             {
               "name": "Referer",
-              "value": "=https://gdg.community.dev/dashboard/gdg-jakarta/events/{{ $('Bevy Config').item.json.bevyEventId }}/registrations"
+              "value": "=https://gdg.community.dev/dashboard/gdg-jakarta/events/{{ $('Bevy Config for Payment').item.json.bevyEventId }}/registrations"
             }
           ]
         },
@@ -1306,7 +624,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -256,
+        -1984,
         -256
       ],
       "retryOnFail": true,
@@ -1316,6 +634,97 @@
           "name": "Bevy API Auth"
         }
       },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "=ipaymu-notify",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1984,
+        208
+      ],
+      "id": "d28bac0c-a5ae-45de-ab97-25c056302ffb",
+      "name": "Webhook Notify Payment",
+      "webhookId": "e0886d92-ce5a-4ba6-ba85-ab25514b71fe",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "content": "CRITICAL TO DO:\nReplace hardcoded authentication in all Bevy HTTP Request nodes.\n\nYour current workflow uses hardcoded `Cookie` and `X-Csrftoken` headers. These will expire, causing the workflow to fail.\n\nRecommended Fix:\n1. Create a new 'Custom Auth' credential in n8n.\n2. Store your `Cookie` and `X-Csrftoken` values there.\n3. In each HTTP Request node for Bevy, change 'Authentication' to 'Custom Auth' and select the credential you created.\n4. You will need a separate process to periodically update these credentials as they expire.",
+        "height": 260.8409118652344,
+        "width": 320,
+        "color": 3
+      },
+      "id": "301387a3-182a-49ac-95b0-72a659844040",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1312,
+        432
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1536,
+        -768
+      ],
+      "id": "bc5d0844-5e3c-4aab-9f46-d58f01e396e4",
+      "name": "Rejected Loop"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1536,
+        -1296
+      ],
+      "id": "3fe7bd7b-7f24-4c6e-98fb-7af9bb01ac6e",
+      "name": "Accepted Loop"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1536,
+        -480
+      ],
+      "id": "cd098129-ca44-4055-a86e-2cbd31fc412f",
+      "name": "Overdue Loop"
+    },
+    {
+      "parameters": {
+        "url": "https://www.uuidgenerator.net/api/version4",
+        "options": {}
+      },
+      "id": "68ec2814-6592-47b2-8b01-40140ae083bd",
+      "name": "Generate UUID - Resend Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        32,
+        528
+      ],
+      "retryOnFail": true,
       "onError": "continueErrorOutput"
     },
     {
@@ -1338,8 +747,8 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "Email Address": "={{ $('Webhook Response').item.json.body.buyer_email }}",
-            "Automation Status": "=ADDED TO {{ $json.attendee_search.ticket_title.toUpperCase() }}"
+            "Email Address": "={{ $('Accepted Loop').item.json['Email Address'] }}",
+            "Automation Status": "ERROR ON CURATION"
           },
           "matchingColumns": [
             "Email Address"
@@ -1396,249 +805,6 @@
               "removed": true
             },
             {
-              "id": "Whatsapp Number",
-              "displayName": "Whatsapp Number",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Full Name",
-              "displayName": "Full Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Gender",
-              "displayName": "Gender",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Institution/Company",
-              "displayName": "Institution/Company",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Role",
-              "displayName": "Role",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "YoE",
-              "displayName": "YoE",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "LinkedIn",
-              "displayName": "LinkedIn",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "id": "2536b0d2-26ca-4301-a085-b76649a97931",
-      "name": "Update automation status to ADDED TO REGULAR TICKET",
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.5,
-      "position": [
-        416,
-        80
-      ],
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "BE69SyJ90j0eJrgx",
-          "name": "Google Sheets account"
-        }
-      },
-      "onError": "Handle Error"
-    },
-    {
-      "parameters": {
-        "httpMethod": "POST",
-        "path": "ipaymu-notify",
-        "responseMode": "responseNode",
-        "options": {
-          "rawBody": true
-        }
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2.1,
-      "position": [
-        -1824,
-        -240
-      ],
-      "id": "d28bac0c-a5ae-45de-ab97-25c056302ffb",
-      "name": "Webhook Notify Payment",
-      "webhookId": "e0886d92-ce5a-4ba6-ba85-ab25514b71fe",
-      "retryOnFail": true
-    },
-    {
-      "parameters": {
-        "content": "CRITICAL TO DO:\nReplace hardcoded authentication in all Bevy HTTP Request nodes.\n\nYour current workflow uses hardcoded `Cookie` and `X-Csrftoken` headers. These will expire, causing the workflow to fail.\n\nRecommended Fix:\n1. Create a new 'Custom Auth' credential in n8n.\n2. Store your `Cookie` and `X-Csrftoken` values there.\n3. In each HTTP Request node for Bevy, change 'Authentication' to 'Custom Auth' and select the credential you created.\n4. You will need a separate process to periodically update these credentials as they expire.",
-        "height": 260.8409118652344,
-        "width": 320,
-        "color": 3
-      },
-      "id": "301387a3-182a-49ac-95b0-72a659844040",
-      "name": "Sticky Note2",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -944,
-        176
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "// --- Split Name Function for n8n ---\n// Sample for testing purpose\nconst sampleBuyerName = \"Fachridan Tio Mu'afa\"\nconst buyerName = $('Webhook Response').first().json.body.buyer_name\nconst fullName = buyerName.trim() || '';\nconst parts = fullName.split(/\\s+/).filter(Boolean);\n\nlet firstName = '';\nlet lastName = '';\n\nif (parts.length === 1) {\n  // Case 0: Handles single names like \"Fachridan\"\n  firstName = parts[0];\n  lastName = parts[0];\n} else if (parts.length > 1) {\n  // Cases 1-4: Handles multi-word names\n  // Assign the last word to lastName\n  lastName = parts.pop();\n  // Join the remaining parts for the firstName\n  firstName = parts.join(' ');\n}\n\n// Returns the final object in the n8n item structure\nreturn {\n  json: {\n    firstName: firstName,\n    lastName: lastName\n  }\n};\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -32,
-        -400
-      ],
-      "id": "4ffae4b7-3100-4ef9-ae87-a90a5cc03470",
-      "name": "Split Name"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 3,
-      "position": [
-        -1376,
-        -912
-      ],
-      "id": "bc5d0844-5e3c-4aab-9f46-d58f01e396e4",
-      "name": "Rejected Loop"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 3,
-      "position": [
-        -1376,
-        -1328
-      ],
-      "id": "3fe7bd7b-7f24-4c6e-98fb-7af9bb01ac6e",
-      "name": "Accepted Loop"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 3,
-      "position": [
-        -1376,
-        -624
-      ],
-      "id": "cd098129-ca44-4055-a86e-2cbd31fc412f",
-      "name": "Overdue Loop"
-    },
-    {
-      "parameters": {
-        "url": "https://www.uuidgenerator.net/api/version4",
-        "options": {}
-      },
-      "id": "68ec2814-6592-47b2-8b01-40140ae083bd",
-      "name": "Generate UUID - Resend Email",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -32,
-        32
-      ],
-      "retryOnFail": true,
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "operation": "appendOrUpdate",
-        "documentId": {
-          "__rl": true,
-          "value": "1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g",
-          "mode": "list",
-          "cachedResultName": "I/O Extended Jakarta 2025 - Interest Form (Responses)",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 1673386161,
-          "mode": "list",
-          "cachedResultName": "Curation Sheet",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k8dsI3wPiB3QEMz0r6pT_ZlIsQgCyi8KCnOeFp1HT0g/edit#gid=1673386161"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "Email Address": "={{ $('Attendee Status Trigger').item.json['Email Address'] }}",
-            "Automation Status": "ERROR ON CURATION"
-          },
-          "matchingColumns": [
-            "Email Address"
-          ],
-          "schema": [
-            {
-              "id": "Attendee Status",
-              "displayName": "Attendee Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Automation Status",
-              "displayName": "Automation Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
               "id": "Session",
               "displayName": "Session",
               "required": false,
@@ -1649,28 +815,8 @@
               "removed": true
             },
             {
-              "id": "Commitment Fee Deadline",
-              "displayName": "Commitment Fee Deadline",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "Email Address",
-              "displayName": "Email Address",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Phone Number",
-              "displayName": "Phone Number",
+              "id": "Whatsapp Number",
+              "displayName": "Whatsapp Number",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -1749,8 +895,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        1536,
-        -1296
+        -224,
+        -512
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -1829,6 +975,16 @@
             {
               "id": "Work Email",
               "displayName": "Work Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Session",
+              "displayName": "Session",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -1917,8 +1073,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        416,
-        -192
+        480,
+        112
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -1937,8 +1093,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        -1600,
-        -240
+        -1760,
+        208
       ],
       "id": "da1eec58-4cd5-4d18-9bcb-3cd2545eabaa",
       "name": "Webhook Response"
@@ -1952,8 +1108,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -528,
-        -1520
+        -320,
+        -1616
       ],
       "typeVersion": 1,
       "id": "2ab768bf-33cd-425c-9bf8-8bae857cee48",
@@ -1962,59 +1118,18 @@
     {
       "parameters": {
         "content": "## TODO: Construct the signature\n- Change the environment apiKey and va\n- Change va on iPaymu API Auth",
-        "height": 128,
+        "height": 112,
         "width": 384,
         "color": 4
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        176,
-        -1504
+        208,
+        -1552
       ],
       "typeVersion": 1,
       "id": "48e83ed8-80e4-4cb6-b05a-18a289afe84c",
       "name": "Sticky Note3"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "7878a87b-40f4-4a0b-9cf7-4948a2745a55",
-              "name": "bevyEventId",
-              "value": "104066",
-              "type": "string"
-            },
-            {
-              "id": "0f622d99-8d77-4ac9-8b01-f10d48fdd7c3",
-              "name": "bevyChapterId",
-              "value": "642",
-              "type": "string"
-            },
-            {
-              "id": "31278189-9a2c-4ecf-96a8-a3f29b4e605d",
-              "name": "bevyRegularTicketId",
-              "value": 55175,
-              "type": "number"
-            },
-            {
-              "id": "c0d05186-f44c-4ad3-bd18-9303d9c00793",
-              "name": "bevyRegularTicketName",
-              "value": "Regular Ticket",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "ea1a7c9c-c48d-47aa-8f8d-2e08d0b90c54",
-      "name": "Bevy Config",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -1152,
-        -240
-      ]
     },
     {
       "parameters": {
@@ -2044,8 +1159,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1376,
-        -240
+        -1536,
+        208
       ],
       "id": "3c171eef-f042-4726-b991-ec02aa64665f",
       "name": "Validate Status Code",
@@ -2058,8 +1173,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -1200,
-        -32
+        -1296,
+        80
       ],
       "typeVersion": 1,
       "id": "671fc82a-cf2e-46cf-9e65-58b71d90ab34",
@@ -2075,7 +1190,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -480,
+        -192,
         -1392
       ],
       "retryOnFail": true,
@@ -2092,8 +1207,8 @@
       "type": "n8n-nodes-base.crypto",
       "typeVersion": 1,
       "position": [
-        640,
-        -1472
+        928,
+        -1328
       ]
     },
     {
@@ -2107,8 +1222,8 @@
       "type": "n8n-nodes-base.crypto",
       "typeVersion": 1,
       "position": [
-        1088,
-        -1472
+        1376,
+        -1328
       ],
       "id": "d8f96c93-0044-430a-ba83-b7ed36afab7a",
       "name": "Calculate the Final HMAC-SHA"
@@ -2142,6 +1257,18 @@
               "type": "string"
             },
             {
+              "id": "50405dc3-6a96-45c3-a3d8-9f15b1761af3",
+              "name": "devBaseUrl",
+              "value": "https://sandbox.ipaymu.com",
+              "type": "string"
+            },
+            {
+              "id": "e27a2dc7-9005-4fa3-b6bc-bd9f63534c2f",
+              "name": "prodBaseUrl",
+              "value": "https://my.ipaymu.com",
+              "type": "string"
+            },
+            {
               "id": "1c822e1b-41db-4e09-96d8-4a44d4d5525f",
               "name": "devNotifyUrl",
               "value": "https://n8n.gdgjakarta.com/webhook-test/ipaymu-notify",
@@ -2172,8 +1299,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -256,
-        -1472
+        32,
+        -1328
       ],
       "id": "0a4afcc3-70ca-4343-959d-2328bb456fb4",
       "name": "iPaymu Config"
@@ -2195,8 +1322,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        864,
-        -1472
+        1152,
+        -1328
       ],
       "id": "5f3bb9aa-d52d-4bef-852c-27666a8a0350",
       "name": "Construct the StringToSign"
@@ -2208,7 +1335,7 @@
             {
               "id": "39bfb6d0-78b6-4a2c-8d4e-d72e0530ad64",
               "name": "requestBody",
-              "value": "={{\n  {\n    \"product\": $json.ticketsName,\n    \"qty\": $json.ticketsQty,\n    \"price\": $json.ticketsPrice,\n    \"description\": $json.ticketsDescription,\n    \"imageUrl\": $json.ticketsImageUrl,\n    \"referenceId\": $('Generate UUID - ReferenceID').item.json.data,\n    \"returnUrl\": $('iPaymu Config').item.json.returnUrl,\n    \"notifyUrl\": $('iPaymu Environment Config').item.json.ipaymuNotifyUrl,\n    \"cancelUrl\": $('iPaymu Config').item.json.failedUrl,\n    \"buyerName\": $('If commitment fee deadline is empty').item.json['Full Name'],\n    \"buyerEmail\": $('If commitment fee deadline is empty').item.json['Email Address'],\n    \"buyerPhone\": $('If commitment fee deadline is empty').item.json['Whatsapp Number'],\n    \"expired\": \"48\",\n    \"feeDirection\": \"BUYER\",\n    \"lang\": \"en\"\n  }\n}}",
+              "value": "={{\n  {\n    \"product\": $json.ticketsName,\n    \"qty\": $json.ticketsQty,\n    \"price\": $json.ticketsPrice,\n    \"description\": $json.ticketsDescription,\n    \"imageUrl\": $json.ticketsImageUrl,\n    \"referenceId\": $('Generate UUID - ReferenceID').item.json.data,\n    \"returnUrl\": $('iPaymu Config').item.json.returnUrl,\n    \"notifyUrl\": $('iPaymu Environment Config').item.json.ipaymuNotifyUrl,\n    \"cancelUrl\": $('iPaymu Config').item.json.failedUrl,\n    \"buyerName\": $('Accepted Loop').item.json['Full Name'].trim(),\n    \"buyerEmail\": $('Accepted Loop').item.json['Email Address'],\n    \"buyerPhone\": $('Accepted Loop').item.json['Whatsapp Number'],\n    \"expired\": \"48\",\n    \"feeDirection\": \"BUYER\",\n    \"lang\": \"en\"\n  }\n}}",
               "type": "object"
             }
           ]
@@ -2218,8 +1345,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        416,
-        -1472
+        704,
+        -1328
       ],
       "id": "1a374f94-05e5-49cf-95fe-4d267b9e8e9e",
       "name": "Build Request Body"
@@ -2241,9 +1368,15 @@
               "type": "string"
             },
             {
+              "id": "5a825a8a-6944-489f-906b-b97eb6d4e43a",
+              "name": "ipaymuBaseUrl",
+              "value": "={{ $json.devBaseUrl }}",
+              "type": "string"
+            },
+            {
               "id": "1c822e1b-41db-4e09-96d8-4a44d4d5525f",
               "name": "ipaymuNotifyUrl",
-              "value": "={{ $json.devNotifyUrl }}",
+              "value": "={{ $json.prodNotifyUrl }}",
               "type": "string"
             }
           ]
@@ -2253,8 +1386,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -32,
-        -1472
+        256,
+        -1328
       ],
       "id": "c2dc6e0e-58c5-4167-957a-e56232e3a3c8",
       "name": "iPaymu Environment Config"
@@ -2266,7 +1399,7 @@
             {
               "id": "bae93fe8-e495-4689-9726-0f1de0a26c7e",
               "name": "ticketsName",
-              "value": "=[\"Regular Ticket\"]",
+              "value": "=[\"Commitment Fee\"]",
               "type": "array"
             },
             {
@@ -2284,7 +1417,7 @@
             {
               "id": "4d6f8c15-beb0-4940-b5a2-4b1d1819cd0e",
               "name": "ticketsDescription",
-              "value": "=[\"This ticket only include a person ticket, vehicle parking ticket will be covered by individually\"]",
+              "value": "=[\"Please note that commitment fee will be fully returned to you in cash on the day of the event upon your attendance. If you are unable to attend, the commitment fee will be forfeited and used as a guarantee for the venue rental.\"]",
               "type": "array"
             },
             {
@@ -2312,8 +1445,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        192,
-        -1472
+        480,
+        -1328
       ],
       "id": "2b06db0f-5f74-44e9-9697-bb53b196dcea",
       "name": "Ticket Details Config"
@@ -2321,7 +1454,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://sandbox.ipaymu.com/api/v2/payment",
+        "url": "={{ $('iPaymu Environment Config').item.json.ipaymuBaseUrl }}/api/v2/payment",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpCustomAuth",
         "sendHeaders": true,
@@ -2330,23 +1463,23 @@
             {
               "name": "signature",
               "value": "={{ $json.calculatedSignature }}"
+            },
+            {
+              "name": "va",
+              "value": "={{ $('iPaymu Environment Config').item.json.ipaymuVa }}"
             }
           ]
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ $('Calculate Body SHA').item.json.requestBody }}",
-        "options": {
-          "redirect": {
-            "redirect": {}
-          }
-        }
+        "jsonBody": "={{ JSON.stringify($('Calculate Body SHA').item.json.requestBody) }}",
+        "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1312,
-        -1472
+        1600,
+        -1328
       ],
       "id": "3683e2de-8a32-4f75-b58a-dd02e7c3bc9b",
       "name": "Generate Payment Link",
@@ -2411,7 +1544,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1600,
+        -1760,
         -1744
       ],
       "retryOnFail": false
@@ -2420,7 +1553,7 @@
       "parameters": {
         "sendTo": "={{ $('Loop Over Items').item.json['Email Address'] }}",
         "subject": "={{ $json.eventName }} - Thank You for Registering Your Interest!",
-        "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{ $json.eventName }} - Thank You for Registering Your Interest</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap\" rel=\"stylesheet\">\n    <style>\n      body {\n        margin: 0;\n        padding: 0;\n        font-family: 'Poppins', sans-serif;\n        background-color: #f1f3f4;\n      }\n\n      .container {\n        max-width: 510px;\n        margin: 0 auto;\n        background-color: #fff;\n        padding: 30px;\n      }\n\n      .header-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .center {\n        text-align: center;\n      }\n\n      .start {\n        text-align: start;\n      }\n\n      .btn {\n        display: block;\n        background-color: #4285f4;\n        color: #fff !important;\n        text-align: center;\n        border-radius: 50px;\n        padding: 10px 20px;\n        text-decoration: none;\n        width: 50%;\n        margin: 20px auto;\n      }\n\n      .btn:hover {\n        background-color: #3367d6;\n      }\n\n      .footer-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .footer {\n        margin-top: 24pt;\n        padding: 18pt 18pt 18pt 18pt;\n        background-color: #f0f0f0;\n      }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <div class=\"center\">\n        <img src=\"{{ $json.eventHeaderEmailUrl }}\" alt=\"Header\" class=\"header-img\">\n      </div>\n      <div class=\"start\">\n        <h2>Hi {{ $('Loop Over Items').item.json['Full Name'] }},</h2>\n      </div>\n      <div class=\"start\">\n        <p>Thank you for registering your interest in <strong>{{ $json.eventName }}</strong>! We're excited about the event and thrilled that you're interested in being a part of it.</p>\n        <p>We are carefully curating a professional audience for this event to ensure a high-quality and engaging experience. Your submission helps us understand your interest and background, which will be considered during the selection process.</p>\n        <p><strong>Please note that this is only an interest form and does not serve as a ticket or official registration for the event.</strong> If you are selected for in-person participation, you will receive a follow-up email with further instructions. However, if you do not receive any future email updates, it means that you are invited to join the event online instead.</p>\n        <p>Stay tuned for more details as we finalize the agenda, speakers, and activities. We’ll be in touch with updates and registration details soon.</p>\n        <a href=\"{{ $json.eventUrl }}\" class=\"btn\">Visit Our Website</a>\n        <p>If you have any questions, feel free to reach out to us at <a href=\"mailto:info@gdgjakarta.org\">info@gdgjakarta.org</a>. </p>\n        <p>Looking forward to seeing you at <strong>{{ $json.eventName }}</strong>! </p>\n      </div>\n      <div class=\"center\">\n        <div class=\"footer\">\n          <span style=\"overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 113.00px; height: 61.13px;\">\n            <img alt=\"footer\" src=\"https://assets.gdgjakarta.org/gdg-jakarta/gdg-sign-bubble-transparent.png\" style=\"width: 113.00px; height: 61.13px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);\" title=\"\">\n          </span>\n        </div>\n      </div>\n    </div>\n  </body>\n</html>",
+        "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{ $json.eventName }} - Thank You for Registering Your Interest</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap\" rel=\"stylesheet\">\n    <style>\n      body {\n        margin: 0;\n        padding: 0;\n        font-family: 'Poppins', sans-serif;\n        background-color: #f1f3f4;\n      }\n\n      .container {\n        max-width: 510px;\n        margin: 0 auto;\n        background-color: #fff;\n        padding: 30px;\n      }\n\n      .header-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .center {\n        text-align: center;\n      }\n\n      .start {\n        text-align: start;\n      }\n\n      .btn {\n        display: block;\n        background-color: #4285f4;\n        color: #fff !important;\n        text-align: center;\n        border-radius: 50px;\n        padding: 10px 20px;\n        text-decoration: none;\n        width: 50%;\n        margin: 20px auto;\n      }\n\n      .btn:hover {\n        background-color: #3367d6;\n      }\n\n      .footer-img {\n        width: 100%;\n        height: auto;\n      }\n\n      .footer {\n        margin-top: 24pt;\n        padding: 18pt 18pt 18pt 18pt;\n        background-color: #f0f0f0;\n      }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <div class=\"center\">\n        <img src=\"{{ $json.eventHeaderEmailUrl }}\" alt=\"Header\" class=\"header-img\">\n      </div>\n      <div class=\"start\">\n        <h2>Hi {{ $('Loop Over Items').item.json['Full Name'] }},</h2>\n      </div>\n      <div class=\"start\">\n        <p>Thank you for registering your interest in <strong>{{ $json.eventName }}</strong>! We're excited about the event and thrilled that you're interested in being a part of it.</p>\n        <p>We are carefully curating a professional audience for this event to ensure a high-quality and engaging experience. Your submission helps us understand your interest and background, which will be considered during the selection process.</p>\n        <p><strong>Please note that this is only an interest form and does not serve as a ticket or official registration for the event.</strong> If you are selected for in-person participation, you will receive a follow-up email with further instructions. However, if you do not receive any future email updates, it unfortunately means we were unable to offer you an in-person spot this time.</p>\n        <p>Stay tuned for more details as we finalize the agenda, speakers, and activities. We’ll be in touch with updates and registration details soon.</p>\n        <a href=\"{{ $json.eventUrl }}\" class=\"btn\">Visit Our Website</a>\n        <p>If you have any questions, feel free to reach out to us at <a href=\"mailto:info@gdgjakarta.org\">info@gdgjakarta.org</a>. </p>\n        <p>Looking forward to seeing you at <strong>{{ $json.eventName }}</strong>! </p>\n      </div>\n      <div class=\"center\">\n        <div class=\"footer\">\n          <span style=\"overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 113.00px; height: 61.13px;\">\n            <img alt=\"footer\" src=\"https://assets.gdgjakarta.org/gdg-jakarta/gdg-sign-bubble-transparent.png\" style=\"width: 113.00px; height: 61.13px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);\" title=\"\">\n          </span>\n        </div>\n      </div>\n    </div>\n  </body>\n</html>",
         "options": {
           "appendAttribution": true
         }
@@ -2430,7 +1563,7 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -928,
+        -1088,
         -1808
       ],
       "webhookId": "d76d00f8-6da8-45ca-9fd0-0adf5fb2afc9",
@@ -2480,15 +1613,430 @@
       "type": "n8n-nodes-base.googleSheetsTrigger",
       "typeVersion": 1,
       "position": [
-        -1824,
+        -1984,
         -1744
       ],
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsTriggerOAuth2Api": {
           "id": "n59zLQzKnunYPchk",
           "name": "Google Sheets Trigger account"
         }
       }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "d49112c7-b71c-4894-b2f5-cb84d798cfa5",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1536,
+        -1744
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Automation triggered on rowAdded from Google Form",
+        "height": 80,
+        "width": 218.6088707718815,
+        "color": 3
+      },
+      "id": "9fba4b0e-5880-4d42-9a2c-c7b0112ade71",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1648,
+        -1936
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1d06373b-8c99-435e-88f1-42d4115ee1df",
+              "name": "eventName",
+              "value": "Road to DevFest Jakarta 2025 [Season 1]",
+              "type": "string"
+            },
+            {
+              "id": "f739b009-f670-4361-8b35-375ef76e46c6",
+              "name": "eventHeaderEmailUrl",
+              "value": "https://assets.gdgjakarta.org/devfest/DF25-Email-Header.png",
+              "type": "string"
+            },
+            {
+              "id": "c3adefc0-8219-43d2-8a00-eacea1f2a6e6",
+              "name": "eventUrl",
+              "value": "https://gdgjakarta.org/rtd-jkt-25-s1",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1312,
+        -848
+      ],
+      "id": "a6db04ad-036e-4156-b797-8600dcc4dd95",
+      "name": "Event Config Rejected"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1d06373b-8c99-435e-88f1-42d4115ee1df",
+              "name": "eventName",
+              "value": "Road to DevFest Jakarta 2025 [Season 1]",
+              "type": "string"
+            },
+            {
+              "id": "f739b009-f670-4361-8b35-375ef76e46c6",
+              "name": "eventHeaderEmailUrl",
+              "value": "https://assets.gdgjakarta.org/devfest/DF25-Email-Header.png",
+              "type": "string"
+            },
+            {
+              "id": "c3adefc0-8219-43d2-8a00-eacea1f2a6e6",
+              "name": "eventUrl",
+              "value": "https://gdgjakarta.org/rtd-jkt-25-s1",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1312,
+        -560
+      ],
+      "id": "67cb3cfc-8feb-44ce-98e3-a54082d3b2fe",
+      "name": "Event Config Overdue"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1d06373b-8c99-435e-88f1-42d4115ee1df",
+              "name": "eventName",
+              "value": "Road to DevFest Jakarta 2025 [Season 1]",
+              "type": "string"
+            },
+            {
+              "id": "f739b009-f670-4361-8b35-375ef76e46c6",
+              "name": "eventHeaderEmailUrl",
+              "value": "https://assets.gdgjakarta.org/devfest/DF25-Email-Header.png",
+              "type": "string"
+            },
+            {
+              "id": "c3adefc0-8219-43d2-8a00-eacea1f2a6e6",
+              "name": "eventUrl",
+              "value": "https://gdgjakarta.org/rtd-jkt-25-s1",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1312,
+        -1808
+      ],
+      "id": "ca9a76be-59b9-4e33-b49e-02ecb9c1daa2",
+      "name": "Event Config Interest"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://whatsapp.gdgjakarta.com/send/message",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "goWhatsappApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"phone\": \"{{ $('Build Request Body').item.json.requestBody.buyerPhone }}@s.whatsapp.net\",\n  \"message\": \"🎉 Congratulations, {{ $('Build Request Body').item.json.requestBody.buyerName }}! You've been selected to attend *{{ $('Ticket Details Config').item.json.eventName }}*! 🚀\\n\\nTo secure your spot, please complete your payment by {{ $('Update Commitment Fee Deadline').item.json['Commitment Fee Deadline'] }}.\\n\\n💳 Payment Link: {{ $('Generate Payment Link').item.json.Data.Url }}\\n\\n❗️ *Important*: Please ensure your Full Name, Email, and Phone Number on the iPaymu payment page match the details you provided in the interest form.\\n\\nWe can't wait to see you there\\n\\n_This message was sent automatically with n8n, you can reply this chat or save this contact to activate the link_\",\n  \"is_forwarded\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2048,
+        -1344
+      ],
+      "id": "0690f22e-76ee-43b3-87e8-780059118ad2",
+      "name": "Send Accepted Message to Whatsapp",
+      "retryOnFail": true,
+      "credentials": {
+        "goWhatsappApi": {
+          "id": "s3KE2IxlXDy1lCRb",
+          "name": "GOWA account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg",
+          "mode": "list",
+          "cachedResultName": "Road to DevFest Jakarta 2025 [Season 1] - Interest Form",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1051899141,
+          "mode": "list",
+          "cachedResultName": "Curation Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit#gid=1051899141"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Email Address",
+              "lookupValue": "={{ $('Webhook Response').item.json.body.buyer_email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -640,
+        64
+      ],
+      "id": "ab96fc48-cbd8-45fc-8184-fce3c1d33f07",
+      "name": "Get Preferred Session",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gdg.community.dev/api/rsvp-event/order/maa-creation-finalization/",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpCustomAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "event",
+              "value": "={{ $('Bevy Config for Payment').item.json.bevyEventId }}"
+            },
+            {
+              "name": "chapter",
+              "value": "={{ $('Bevy Config for Payment').item.json.bevyChapterId }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Referer",
+              "value": "=https://gdg.community.dev/dashboard/gdg-jakarta/events/{{ $('Bevy Config for Payment').item.json.bevyEventId }}/registrations"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"attendee\": {\n    \"first_name\": \"{{ $('Split Name - Session 1').item.json.firstName }}\",\n    \"last_name\": \"{{ $('Split Name - Session 1').item.json.lastName }}\",\n    \"email\": \"{{ $('Webhook Response').item.json.body.buyer_email }}\"\n  },\n  \"ticket\": {{ $('Bevy Config for Payment').item.json.bevyMorningTicketId }},\n  \"signup_consent\": true,\n  \"send_confirmation_email\": true\n}\n",
+        "options": {}
+      },
+      "id": "00946a00-5a35-4024-a106-18650070968d",
+      "name": "Add Attendee to Morning Ticket",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        256,
+        -32
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "httpCustomAuth": {
+          "id": "sNXseg2u7NwkctVY",
+          "name": "Bevy API Auth"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://gdg.community.dev/api/attendee_search/",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpCustomAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "event",
+              "value": "={{ $('Bevy Config for Payment').item.json.bevyEventId }}"
+            },
+            {
+              "name": "chapter",
+              "value": "={{ $('Bevy Config for Payment').item.json.bevyChapterId }}"
+            },
+            {
+              "name": "search",
+              "value": "={{ $json.Session.split(' ')[0] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1abd3374-55f3-41cb-925f-4e60a248a171",
+      "name": "Get Participants Session by Preferred Session",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -416,
+        64
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "httpCustomAuth": {
+          "id": "sNXseg2u7NwkctVY",
+          "name": "Bevy API Auth"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "811adf73-39f8-496c-a226-cac860b18f6b",
+              "leftValue": "={{ $json.count }}",
+              "rightValue": 100,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            },
+            {
+              "id": "73e25936-33b4-4743-86fc-f22062d52361",
+              "leftValue": "={{ $('Get Preferred Session').item.json.Session.split(' ')[0] }} Ticket",
+              "rightValue": "={{ $('Bevy Config for Payment').item.json.bevyMorningTicketName }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "abc9bdc0-2d59-4670-9d59-e1c4d0a47756",
+      "name": "Validate Morning Session Slot",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -192,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- Split Name Function for n8n ---\n// Sample for testing purpose\nconst sampleBuyerName = \"Fachridan Tio Mu'afa\"\nconst buyerName = $('Webhook Response').first().json.body.buyer_name\nconst fullName = buyerName.trim() || '';\nconst parts = fullName.split(/\\s+/).filter(Boolean);\n\nlet firstName = '';\nlet lastName = '';\n\nif (parts.length === 1) {\n  // Case 0: Handles single names like \"Fachridan\"\n  firstName = parts[0];\n  lastName = parts[0];\n} else if (parts.length > 1) {\n  // Cases 1-4: Handles multi-word names\n  // Assign the last word to lastName\n  lastName = parts.pop();\n  // Join the remaining parts for the firstName\n  firstName = parts.join(' ');\n}\n\n// Returns the final object in the n8n item structure\nreturn {\n  json: {\n    firstName: firstName,\n    lastName: lastName\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        32,
+        -32
+      ],
+      "id": "4ffae4b7-3100-4ef9-ae87-a90a5cc03470",
+      "name": "Split Name - Session 1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- Split Name Function for n8n ---\n// Sample for testing purpose\nconst sampleBuyerName = \"Fachridan Tio Mu'afa\"\nconst buyerName = $('Webhook Response').first().json.body.buyer_name\nconst fullName = buyerName.trim() || '';\nconst parts = fullName.split(/\\s+/).filter(Boolean);\n\nlet firstName = '';\nlet lastName = '';\n\nif (parts.length === 1) {\n  // Case 0: Handles single names like \"Fachridan\"\n  firstName = parts[0];\n  lastName = parts[0];\n} else if (parts.length > 1) {\n  // Cases 1-4: Handles multi-word names\n  // Assign the last word to lastName\n  lastName = parts.pop();\n  // Join the remaining parts for the firstName\n  firstName = parts.join(' ');\n}\n\n// Returns the final object in the n8n item structure\nreturn {\n  json: {\n    firstName: firstName,\n    lastName: lastName\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        32,
+        160
+      ],
+      "id": "0669d4e7-e5d0-4261-8fb4-7b81b4fd932b",
+      "name": "Split Name - Session 2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gdg.community.dev/api/rsvp-event/order/maa-creation-finalization/",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpCustomAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "event",
+              "value": "={{ $('Bevy Config for Payment').item.json.bevyEventId }}"
+            },
+            {
+              "name": "chapter",
+              "value": "={{ $('Bevy Config for Payment').item.json.bevyChapterId }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Referer",
+              "value": "=https://gdg.community.dev/dashboard/gdg-jakarta/events/{{ $('Bevy Config for Payment').item.json.bevyEventId }}/registrations"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"attendee\": {\n    \"first_name\": \"{{ $('Split Name - Session 2').item.json.firstName }}\",\n    \"last_name\": \"{{ $('Split Name - Session 2').item.json.lastName }}\",\n    \"email\": \"{{ $('Webhook Response').item.json.body.buyer_email }}\"\n  },\n  \"ticket\": {{ $('Bevy Config for Payment').item.json.bevyAfternoonTicketId }},\n  \"signup_consent\": true,\n  \"send_confirmation_email\": true\n}\n",
+        "options": {}
+      },
+      "id": "47a24ae0-bbc5-4ea1-b405-ba040e5a8a7e",
+      "name": "Add Attendee to Afternoon Ticket",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        256,
+        160
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "httpCustomAuth": {
+          "id": "sNXseg2u7NwkctVY",
+          "name": "Bevy API Auth"
+        }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -2510,8 +2058,8 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "Email Address": "={{ $('Loop Over Items').item.json['Email Address'] }}",
-            "Automation Status": "=INTEREST EMAIL {{ $json.labelIds[0] }}"
+            "Email Address": "={{ $('Webhook Response').item.json.body.buyer_email }}",
+            "Automation Status": "=ADDED TO {{ $json.attendee_search.ticket_title.toUpperCase() }}"
           },
           "matchingColumns": [
             "Email Address"
@@ -2560,6 +2108,807 @@
             {
               "id": "Work Email",
               "displayName": "Work Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Session",
+              "displayName": "Session",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Whatsapp Number",
+              "displayName": "Whatsapp Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Institution/Company",
+              "displayName": "Institution/Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "YoE",
+              "displayName": "YoE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LinkedIn",
+              "displayName": "LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "2536b0d2-26ca-4301-a085-b76649a97931",
+      "name": "Update automation status to ADDED TO BEVY",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        480,
+        304
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "Handle Error"
+    },
+    {
+      "parameters": {
+        "url": "https://gdg.community.dev/api/attendee_search/",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpCustomAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "event",
+              "value": "={{ $('Bevy Config for Payment').item.json.bevyEventId }}"
+            },
+            {
+              "name": "chapter",
+              "value": "={{ $('Bevy Config for Payment').item.json.bevyChapterId }}"
+            },
+            {
+              "name": "search",
+              "value": "={{ $('Webhook Response').item.json.body.buyer_email }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {}
+        }
+      },
+      "id": "5a9bee28-e1ec-4c6a-a363-f5a5faa5b843",
+      "name": "Get Attendee by Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1088,
+        208
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "httpCustomAuth": {
+          "id": "sNXseg2u7NwkctVY",
+          "name": "Bevy API Auth"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://gdg.community.dev/api/attendee_search/",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpCustomAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "event",
+              "value": "={{ $('Bevy Config for Checking').item.json.bevyEventId }}"
+            },
+            {
+              "name": "chapter",
+              "value": "={{ $('Bevy Config for Checking').item.json.bevyChapterId }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {}
+        }
+      },
+      "id": "e0dd8dd4-f95e-41c7-84ef-8a8850793191",
+      "name": "Check Current Registered Participants",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1088,
+        -1376
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "httpCustomAuth": {
+          "id": "sNXseg2u7NwkctVY",
+          "name": "Bevy API Auth"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7878a87b-40f4-4a0b-9cf7-4948a2745a55",
+              "name": "bevyEventId",
+              "value": "104066",
+              "type": "string"
+            },
+            {
+              "id": "0f622d99-8d77-4ac9-8b01-f10d48fdd7c3",
+              "name": "bevyChapterId",
+              "value": "642",
+              "type": "string"
+            },
+            {
+              "id": "31278189-9a2c-4ecf-96a8-a3f29b4e605d",
+              "name": "bevyMorningTicketId",
+              "value": 55175,
+              "type": "number"
+            },
+            {
+              "id": "989c6a6b-8d88-4b46-bc5d-d61034b1bc78",
+              "name": "bevyAfternoonTicketId",
+              "value": "55502",
+              "type": "string"
+            },
+            {
+              "id": "f9a56ffd-02c3-4671-bd85-3acfe01b8988",
+              "name": "bevyMorningTicketName",
+              "value": "Morning Ticket",
+              "type": "string"
+            },
+            {
+              "id": "fa404aca-57ee-4d04-9ebf-926ecb393f17",
+              "name": "bevyAfternoonTicketName",
+              "value": "Afternoon Ticket",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ea1a7c9c-c48d-47aa-8f8d-2e08d0b90c54",
+      "name": "Bevy Config for Payment",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1312,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7878a87b-40f4-4a0b-9cf7-4948a2745a55",
+              "name": "bevyEventId",
+              "value": "104066",
+              "type": "string"
+            },
+            {
+              "id": "0f622d99-8d77-4ac9-8b01-f10d48fdd7c3",
+              "name": "bevyChapterId",
+              "value": "642",
+              "type": "string"
+            },
+            {
+              "id": "31278189-9a2c-4ecf-96a8-a3f29b4e605d",
+              "name": "bevyMorningTicketId",
+              "value": 55175,
+              "type": "number"
+            },
+            {
+              "id": "989c6a6b-8d88-4b46-bc5d-d61034b1bc78",
+              "name": "bevyAfternoonTicketId",
+              "value": "55502",
+              "type": "string"
+            },
+            {
+              "id": "f9a56ffd-02c3-4671-bd85-3acfe01b8988",
+              "name": "bevyMorningTicketName",
+              "value": "Morning Ticket",
+              "type": "string"
+            },
+            {
+              "id": "fa404aca-57ee-4d04-9ebf-926ecb393f17",
+              "name": "bevyAfternoonTicketName",
+              "value": "Afternoon Ticket",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b5c7d6a2-7621-46c3-a4d7-26f74e59759d",
+      "name": "Bevy Config for Checking",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1312,
+        -1376
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6a2a134e-33d0-4b26-9132-a62fb5615c27",
+              "leftValue": "={{ $json.count }}",
+              "rightValue": 200,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -864,
+        -1296
+      ],
+      "id": "4889eeda-3475-48f5-a5bc-73f5b3c8bf99",
+      "name": "Validate Session Quota"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg",
+          "mode": "list",
+          "cachedResultName": "Road to DevFest Jakarta 2025 [Season 1] - Interest Form",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1051899141,
+          "mode": "list",
+          "cachedResultName": "Curation Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit#gid=1051899141"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Validate Commitment Fee Deadline').item.json['Email Address'] }}",
+            "Automation Status": "=EVENT ALREADY FULL"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Attendee Status",
+              "displayName": "Attendee Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Commitment Fee Deadline",
+              "displayName": "Commitment Fee Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Work Email",
+              "displayName": "Work Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Session",
+              "displayName": "Session",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Whatsapp Number",
+              "displayName": "Whatsapp Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Institution/Company",
+              "displayName": "Institution/Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "YoE",
+              "displayName": "YoE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LinkedIn",
+              "displayName": "LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "07d838ee-ea1b-4bde-9639-c913f25f3791",
+      "name": "Update automation status to EVENT ALREADY FULL",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -640,
+        -1136
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "de0aaaa2-d3c6-4141-a113-4fcec243172c",
+              "leftValue": "={{ $('Accepted Loop').item.json['Commitment Fee Deadline'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "25e16b10-e0ed-4a4e-9140-cd8531102cef",
+      "name": "Validate Commitment Fee Deadline",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -640,
+        -1392
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg",
+          "mode": "list",
+          "cachedResultName": "Road to DevFest Jakarta 2025 [Season 1] - Interest Form",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1051899141,
+          "mode": "list",
+          "cachedResultName": "Curation Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit#gid=1051899141"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Accepted Loop').item.json['Email Address'] }}",
+            "Automation Status": "=ACCEPTANCE EMAIL SENT"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Attendee Status",
+              "displayName": "Attendee Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Commitment Fee Deadline",
+              "displayName": "Commitment Fee Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Work Email",
+              "displayName": "Work Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Session",
+              "displayName": "Session",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Whatsapp Number",
+              "displayName": "Whatsapp Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Institution/Company",
+              "displayName": "Institution/Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "YoE",
+              "displayName": "YoE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LinkedIn",
+              "displayName": "LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "7a2bf72d-1e65-4e61-8d21-d6ce9056f233",
+      "name": "Update automation status to ACCEPTANCE EMAIL SENT",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2304,
+        -1344
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg",
+          "mode": "list",
+          "cachedResultName": "Road to DevFest Jakarta 2025 [Season 1] - Interest Form",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1051899141,
+          "mode": "list",
+          "cachedResultName": "Curation Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit#gid=1051899141"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Loop Over Items').item.json['Email Address'] }}",
+            "Automation Status": "=INTEREST EMAIL SENT"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Attendee Status",
+              "displayName": "Attendee Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Commitment Fee Deadline",
+              "displayName": "Commitment Fee Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Work Email",
+              "displayName": "Work Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Session",
+              "displayName": "Session",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -2648,7 +2997,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        -704,
+        -864,
         -1744
       ],
       "retryOnFail": true,
@@ -2661,167 +3010,384 @@
     },
     {
       "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg",
+          "mode": "list",
+          "cachedResultName": "Road to DevFest Jakarta 2025 [Season 1] - Interest Form",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1051899141,
+          "mode": "list",
+          "cachedResultName": "Curation Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit#gid=1051899141"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Rejected Loop').item.json['Email Address'] }}",
+            "Automation Status": "=REJECTED EMAIL SENT"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
+            {
+              "id": "Attendee Status",
+              "displayName": "Attendee Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Commitment Fee Deadline",
+              "displayName": "Commitment Fee Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Work Email",
+              "displayName": "Work Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Session",
+              "displayName": "Session",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Whatsapp Number",
+              "displayName": "Whatsapp Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Institution/Company",
+              "displayName": "Institution/Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "YoE",
+              "displayName": "YoE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LinkedIn",
+              "displayName": "LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
         "options": {}
       },
-      "id": "d49112c7-b71c-4894-b2f5-cb84d798cfa5",
-      "name": "Loop Over Items",
-      "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 3,
+      "id": "5a33db5c-f8eb-4ab3-8800-0207f613f364",
+      "name": "Update automation status to REJECTED EMAIL SENT",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
       "position": [
-        -1376,
-        -1744
-      ]
-    },
-    {
-      "parameters": {
-        "content": "Automation triggered on rowAdded from Google Form",
-        "height": 80,
-        "width": 218.6088707718815,
-        "color": 3
-      },
-      "id": "9fba4b0e-5880-4d42-9a2c-c7b0112ade71",
-      "name": "Sticky Note5",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -1648,
-        -1936
-      ]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://whatsapp.gdgjakarta.com/send/message",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpCustomAuth",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={ \n  \"phone\": \"{{ $('Build Request Body').item.json.requestBody.buyerPhone }}@s.whatsapp.net\", \n  \"message\": \"🎉 Congratulations, {{ $('Build Request Body').item.json.requestBody.buyerName }}! You've been selected to attend *{{ $('Ticket Details Config').item.json.eventName }}*! 🚀\\n\\nTo secure your spot, please complete your payment by {{ $('Update Commitment Fee Deadline').item.json['Commitment Fee Deadline'] }}.\\n\\n💳 Payment Link: {{ $('Generate Payment Link').item.json.Data.Url }}\\n\\n❗️ *Important*: Please ensure your Full Name, Email, and Phone Number on the iPaymu payment page match the details you provided in the interest form.\\n\\nWe can't wait to see you there!\",\n  \"is_forwarded\": false\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1760,
-        -1520
+        -864,
+        -768
       ],
-      "id": "c493a6c5-301c-4613-9d19-23138e347fdc",
-      "name": "Send Accepted Message to Whatsapp",
-      "retryOnFail": true,
       "credentials": {
-        "httpCustomAuth": {
-          "id": "RuhpQUZKxSBaTeXv",
-          "name": "Whatsapp Web MultiDevice API Auth"
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
         }
       }
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg",
+          "mode": "list",
+          "cachedResultName": "Road to DevFest Jakarta 2025 [Season 1] - Interest Form",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1051899141,
+          "mode": "list",
+          "cachedResultName": "Curation Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E4XPZBoSbBK3jyaphXWFg0NezLjiB3YS0QDBsdLTJVg/edit#gid=1051899141"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email Address": "={{ $('Overdue Loop').item.json['Email Address'] }}",
+            "Automation Status": "=OVERDUE EMAIL SENT"
+          },
+          "matchingColumns": [
+            "Email Address"
+          ],
+          "schema": [
             {
-              "id": "1d06373b-8c99-435e-88f1-42d4115ee1df",
-              "name": "eventName",
-              "value": "Road to DevFest Jakarta 2025 [Season 1]",
-              "type": "string"
+              "id": "Attendee Status",
+              "displayName": "Attendee Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
             },
             {
-              "id": "f739b009-f670-4361-8b35-375ef76e46c6",
-              "name": "eventHeaderEmailUrl",
-              "value": "https://assets.gdgjakarta.org/devfest/DF25-Email-Header.png",
-              "type": "string"
+              "id": "Automation Status",
+              "displayName": "Automation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
-              "id": "c3adefc0-8219-43d2-8a00-eacea1f2a6e6",
-              "name": "eventUrl",
-              "value": "https://gdgjakarta.org/rtd-jkt-25-s1",
-              "type": "string"
+              "id": "Commitment Fee Deadline",
+              "displayName": "Commitment Fee Deadline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Work Email",
+              "displayName": "Work Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Session",
+              "displayName": "Session",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Whatsapp Number",
+              "displayName": "Whatsapp Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Institution/Company",
+              "displayName": "Institution/Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "YoE",
+              "displayName": "YoE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "LinkedIn",
+              "displayName": "LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
             }
-          ]
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
         },
         "options": {}
       },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
+      "id": "5f16a062-8771-4b17-aae9-b36017f2b2fc",
+      "name": "Update automation status to OVERDUE EMAIL SENT",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
       "position": [
-        -1152,
-        -992
+        -864,
+        -480
       ],
-      "id": "a6db04ad-036e-4156-b797-8600dcc4dd95",
-      "name": "Event Config Rejected"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "1d06373b-8c99-435e-88f1-42d4115ee1df",
-              "name": "eventName",
-              "value": "Road to DevFest Jakarta 2025 [Season 1]",
-              "type": "string"
-            },
-            {
-              "id": "f739b009-f670-4361-8b35-375ef76e46c6",
-              "name": "eventHeaderEmailUrl",
-              "value": "https://assets.gdgjakarta.org/devfest/DF25-Email-Header.png",
-              "type": "string"
-            },
-            {
-              "id": "c3adefc0-8219-43d2-8a00-eacea1f2a6e6",
-              "name": "eventUrl",
-              "value": "https://gdgjakarta.org/rtd-jkt-25-s1",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -1152,
-        -704
-      ],
-      "id": "67cb3cfc-8feb-44ce-98e3-a54082d3b2fe",
-      "name": "Event Config Overdue"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "1d06373b-8c99-435e-88f1-42d4115ee1df",
-              "name": "eventName",
-              "value": "Road to DevFest Jakarta 2025 [Season 1]",
-              "type": "string"
-            },
-            {
-              "id": "f739b009-f670-4361-8b35-375ef76e46c6",
-              "name": "eventHeaderEmailUrl",
-              "value": "https://assets.gdgjakarta.org/devfest/DF25-Email-Header.png",
-              "type": "string"
-            },
-            {
-              "id": "c3adefc0-8219-43d2-8a00-eacea1f2a6e6",
-              "name": "eventUrl",
-              "value": "https://gdgjakarta.org/rtd-jkt-25-s1",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -1152,
-        -1808
-      ],
-      "id": "ca9a76be-59b9-4e33-b49e-02ecb9c1daa2",
-      "name": "Event Config Interest"
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BE69SyJ90j0eJrgx",
+          "name": "Google Sheets account"
+        }
+      }
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Attendee Status Trigger": [
+      {
+        "json": {
+          "row_number": 4,
+          "Attendee Status": "ACCEPTED",
+          "Automation Status": "ACCEPTANCE EMAIL FAILED",
+          "Commitment Fee Deadline": "",
+          "Email Address": "shalsabdputri@gmail.com",
+          "Work Email": "shalsa.putri@asyst.co.id",
+          "Session": "Afternoon (13:30 WIB - 16:00 WIB)",
+          "Whatsapp Number": 6281364832183,
+          "Full Name": "Shalsa Billa Dwi Putri ",
+          "Gender": "Female",
+          "Institution/Company": "PT Aero Systems Indonesia",
+          "Role": "Solution Analyst",
+          "YoE": "> 1 - 2 years",
+          "LinkedIn": "https://www.linkedin.com/in/shalsa-billa-dwi-putri-906271237/",
+          "": ""
+        }
+      }
+    ]
+  },
   "connections": {
     "Attendee Status Trigger": {
       "main": [
@@ -2848,17 +3414,6 @@
       "main": [
         [
           {
-            "node": "Check if commitment fee deadline is not empty",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check if commitment fee deadline is not empty": {
-      "main": [
-        [
-          {
             "node": "Generate UUID - ReferenceID",
             "type": "main",
             "index": 0
@@ -2877,7 +3432,7 @@
         ],
         [
           {
-            "node": "Send Accepted Message to Whatsapp",
+            "node": "Update Automation Status to Error - Curation",
             "type": "main",
             "index": 0
           }
@@ -2895,7 +3450,7 @@
         ],
         [
           {
-            "node": "Update automation status to REJECTED EMAIL SENT",
+            "node": "Update Automation Status to Error - Curation",
             "type": "main",
             "index": 0
           }
@@ -2913,7 +3468,7 @@
         ],
         [
           {
-            "node": "Update automation status to OVERDUE EMAIL SENT",
+            "node": "Update Automation Status to Error - Curation",
             "type": "main",
             "index": 0
           }
@@ -2953,23 +3508,11 @@
         ]
       ]
     },
-    "If commitment fee deadline is empty": {
-      "main": [
-        [
-          {
-            "node": "Update Commitment Fee Deadline",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        []
-      ]
-    },
     "Resend Event Email": {
       "main": [
         [
           {
-            "node": "Update automation status to ADDED TO REGULAR TICKET",
+            "node": "Update automation status to ADDED TO BEVY",
             "type": "main",
             "index": 0
           }
@@ -2987,61 +3530,7 @@
       "main": [
         [
           {
-            "node": "Split Name",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "If ticket title is not Regular Ticket",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get attendee by email": {
-      "main": [
-        [
-          {
-            "node": "If attendee has not been added",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Update Automation Status to Error - Bevy",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Add Attendee to Regular Ticket": {
-      "main": [
-        [
-          {
-            "node": "Update automation status to ADDED TO REGULAR TICKET",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Update Automation Status to Error - Bevy",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If ticket title is not Regular Ticket": {
-      "main": [
-        [
-          {
-            "node": "Delete Attendee",
+            "node": "Get Preferred Session",
             "type": "main",
             "index": 0
           }
@@ -3057,20 +3546,8 @@
     },
     "Delete Attendee": {
       "main": [
-        [
-          {
-            "node": "Split Name",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Update Automation Status to Error - Bevy",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [],
+        []
       ]
     },
     "Webhook Notify Payment": {
@@ -3078,50 +3555,6 @@
         [
           {
             "node": "Webhook Response",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Split Name": {
-      "main": [
-        [
-          {
-            "node": "Add Attendee to Regular Ticket",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Update automation status to ACCEPTANCE EMAIL SENT": {
-      "main": [
-        [
-          {
-            "node": "Accepted Loop",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Update automation status to REJECTED EMAIL SENT": {
-      "main": [
-        [
-          {
-            "node": "Rejected Loop",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Update automation status to OVERDUE EMAIL SENT": {
-      "main": [
-        [
-          {
-            "node": "Overdue Loop",
             "type": "main",
             "index": 0
           }
@@ -3145,7 +3578,7 @@
         [],
         [
           {
-            "node": "If commitment fee deadline is empty",
+            "node": "Bevy Config for Checking",
             "type": "main",
             "index": 0
           }
@@ -3193,22 +3626,11 @@
         ]
       ]
     },
-    "Bevy Config": {
-      "main": [
-        [
-          {
-            "node": "Get attendee by email",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Validate Status Code": {
       "main": [
         [
           {
-            "node": "Bevy Config",
+            "node": "Bevy Config for Payment",
             "type": "main",
             "index": 0
           }
@@ -3350,7 +3772,7 @@
         ],
         [
           {
-            "node": "Update automation status to INTEREST EMAIL SENT",
+            "node": "Update Automation Status to Error - Curation",
             "type": "main",
             "index": 0
           }
@@ -3368,34 +3790,12 @@
         ]
       ]
     },
-    "Update automation status to INTEREST EMAIL SENT": {
-      "main": [
-        [
-          {
-            "node": "Loop Over Items",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Loop Over Items": {
       "main": [
         [],
         [
           {
             "node": "Event Config Interest",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Send Accepted Message to Whatsapp": {
-      "main": [
-        [
-          {
-            "node": "Update automation status to ACCEPTANCE EMAIL SENT",
             "type": "main",
             "index": 0
           }
@@ -3434,13 +3834,257 @@
           }
         ]
       ]
+    },
+    "Send Accepted Message to Whatsapp": {
+      "main": [
+        [
+          {
+            "node": "Update automation status to ACCEPTANCE EMAIL SENT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Preferred Session": {
+      "main": [
+        [
+          {
+            "node": "Get Participants Session by Preferred Session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Attendee to Morning Ticket": {
+      "main": [
+        [
+          {
+            "node": "Update automation status to ADDED TO BEVY",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Automation Status to Error - Bevy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Participants Session by Preferred Session": {
+      "main": [
+        [
+          {
+            "node": "Validate Morning Session Slot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Morning Session Slot": {
+      "main": [
+        [
+          {
+            "node": "Split Name - Session 1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split Name - Session 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Name - Session 1": {
+      "main": [
+        [
+          {
+            "node": "Add Attendee to Morning Ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Name - Session 2": {
+      "main": [
+        [
+          {
+            "node": "Add Attendee to Afternoon Ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Attendee to Afternoon Ticket": {
+      "main": [
+        [
+          {
+            "node": "Update automation status to ADDED TO BEVY",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Automation Status to Error - Bevy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Attendee by Email": {
+      "main": [
+        [
+          {
+            "node": "If attendee has not been added",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Automation Status to Error - Bevy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Current Registered Participants": {
+      "main": [
+        [
+          {
+            "node": "Validate Session Quota",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Automation Status to Error - Curation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bevy Config for Payment": {
+      "main": [
+        [
+          {
+            "node": "Get Attendee by Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bevy Config for Checking": {
+      "main": [
+        [
+          {
+            "node": "Check Current Registered Participants",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Session Quota": {
+      "main": [
+        [
+          {
+            "node": "Validate Commitment Fee Deadline",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update automation status to EVENT ALREADY FULL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Commitment Fee Deadline": {
+      "main": [
+        [
+          {
+            "node": "Update Commitment Fee Deadline",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Update automation status to ACCEPTANCE EMAIL SENT": {
+      "main": [
+        [
+          {
+            "node": "Accepted Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update automation status to INTEREST EMAIL SENT": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update automation status to REJECTED EMAIL SENT": {
+      "main": [
+        [
+          {
+            "node": "Rejected Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update automation status to OVERDUE EMAIL SENT": {
+      "main": [
+        [
+          {
+            "node": "Overdue Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "timezone": "Asia/Jakarta",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "90uuj0M0Y56TvbRf"
   },
-  "versionId": "be3010eb-9937-443f-b47e-bf4cda62766c",
+  "versionId": "16a7b6de-2926-4703-82c2-be553daefdec",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "496db227451f90ed7caa7ec4cceb57d946f3edcf2e38a2d5c1a3c7afe039993c"

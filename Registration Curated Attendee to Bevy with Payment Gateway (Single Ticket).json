@@ -3365,29 +3365,7 @@
       }
     }
   ],
-  "pinData": {
-    "Attendee Status Trigger": [
-      {
-        "json": {
-          "row_number": 4,
-          "Attendee Status": "ACCEPTED",
-          "Automation Status": "ACCEPTANCE EMAIL FAILED",
-          "Commitment Fee Deadline": "",
-          "Email Address": "shalsabdputri@gmail.com",
-          "Work Email": "shalsa.putri@asyst.co.id",
-          "Session": "Afternoon (13:30 WIB - 16:00 WIB)",
-          "Whatsapp Number": 6281364832183,
-          "Full Name": "Shalsa Billa Dwi Putri ",
-          "Gender": "Female",
-          "Institution/Company": "PT Aero Systems Indonesia",
-          "Role": "Solution Analyst",
-          "YoE": "> 1 - 2 years",
-          "LinkedIn": "https://www.linkedin.com/in/shalsa-billa-dwi-putri-906271237/",
-          "": ""
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "connections": {
     "Attendee Status Trigger": {
       "main": [
@@ -4084,7 +4062,7 @@
     "callerPolicy": "workflowsFromSameOwner",
     "errorWorkflow": "90uuj0M0Y56TvbRf"
   },
-  "versionId": "16a7b6de-2926-4703-82c2-be553daefdec",
+  "versionId": "8bc41046-0a4a-49c7-88ec-224ec6891fac",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "496db227451f90ed7caa7ec4cceb57d946f3edcf2e38a2d5c1a3c7afe039993c"
